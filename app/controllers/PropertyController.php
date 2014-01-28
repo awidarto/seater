@@ -261,6 +261,11 @@ class PropertyController extends AdminController {
         {
             $population['full_url'] = $population['large_url'];
         }
+        if( !isset($population['sourceID']))
+        {
+            $population['sourceID'] = 'none';
+        }
+
         return $population;
     }
 

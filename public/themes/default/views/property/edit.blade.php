@@ -114,7 +114,7 @@
                     {{ Former::hidden('longitude')->class('gllpLongitude')}}
                     {{ Former::hidden('zoom')->class('gllpZoom')}}
 
-                    {{--<input type="button" class="gllpUpdateButton" value="update map">--}}
+                    {{ <input type="button" class="gllpUpdateButton" value="update map"> }}
                 </fieldset>
             </div>
 
