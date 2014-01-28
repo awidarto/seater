@@ -7,6 +7,23 @@
 	cursor: pointer;
 }
 
+.pending{
+	padding: 4px;
+	background-color: yellow;
+}
+
+.canceled{
+	padding: 4px;
+	background-color: red;
+	color:white;
+}
+
+.sold{
+	padding: 4px;
+	background-color: green;
+	color:white;
+}
+
 </style>
 
 <div class="row-fluid">
@@ -583,7 +600,9 @@
             'json');
 		});
 
-
+		$('#chg-modal').on('hidden', function () {
+			oTable.fnDraw();
+		})
     });
   </script>
 

@@ -60,7 +60,7 @@ class TransactionController extends AdminController {
             array('orderNumber',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('propertyId',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
             array('total_purchase',array('kind'=>'text','callback'=>'tousd','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('orderStatus',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('orderStatus',array('kind'=>'text', 'callback'=>'statcolor' ,'query'=>'like','pos'=>'both','show'=>true)),
             array('agentName',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('firstname',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('lastname',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
@@ -121,6 +121,10 @@ class TransactionController extends AdminController {
 
     public function tousd($data){
         return '$'.Ks::usd($data['total_purchase']);
+    }
+
+    public function statcolor($data){
+        return '<span class="'.$data['orderStatus'].'">'.$data['orderStatus'].'</span>';
     }
 
     public function makeActions($data)
