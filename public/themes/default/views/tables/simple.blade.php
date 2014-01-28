@@ -2,6 +2,13 @@
 
 @section('content')
 
+<style type="text/css">
+.act{
+	cursor: pointer;
+}
+
+</style>
+
 <div class="row-fluid">
 	<div class="span12 command-bar">
 
@@ -152,6 +159,22 @@
       </table>
 
    </div>
+</div>
+
+<div id="chg-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Change Transaction Status</h3>
+  </div>
+  <div class="modal-body">
+  	<h4 id="trx-order"></h4>
+  	{{ Former::hidden('trx_id')->id('trx-chg') }}
+  	{{ Former::select('status', 'Status')->options(array('sold'=>'Sold', 'canceled'=>'Cancel'))->id('stat-chg')}}
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button class="btn btn-primary" id="save-chg">Save changes</button>
+  </div>
 </div>
 
 <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
@@ -533,8 +556,32 @@
 
 		   	}
 
+			if ($(e.target).is('.chg')) {
+				var _id = e.target.id;
+				var _rel = $(e.target).attr('rel');
+
+				$('#chg-modal').modal();
+
+				$('#trx-chg').val(_id);
+
+				$('#trx-order').html('Order # : ' + _rel);
+
+		   	}
+
 		});
 
+
+		$('#save-chg').on('click',function(){
+            $.post('{{ URL::to('ajax/changestatus')}}',
+            {
+                trx_id:$('#trx-chg').val(),
+                status:$('#stat-chg').val()
+            },
+            function(data){
+				$('#chg-modal').modal('hide');
+            },
+            'json');
+		});
 
 
     });

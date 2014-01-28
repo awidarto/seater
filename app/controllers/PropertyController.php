@@ -304,7 +304,7 @@ class PropertyController extends AdminController {
         $dl = '<a href="'.URL::to('brochure/dl/'.$data['_id']).'" target="new"><i class="icon-download"></i> Download</a>';
         $print = '<a href="'.URL::to('brochure/print/'.$data['_id']).'" target="new"><i class="icon-print"></i> Print</a>';
 
-        $actions = $edit.'<br />'.$dl.'<br />'.$print.'<br />'.$delete;
+        $actions = $edit.'<br />'.$dl.'<br />'.$delete;
         return $actions;
     }
 

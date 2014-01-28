@@ -113,7 +113,7 @@
 
 
         table.financial th.item{
-            width: 30%;
+            width: 50%;
             font-size: 14px;
             line-height: 20px;
             vertical-align: middle;
@@ -146,9 +146,9 @@
         }
 
         table.financial th.item{
+            width: 50%;
             vertical-align: middle;
             text-align: left;
-            min-width:150px;
             padding-right: 8px;
         }
 
@@ -163,6 +163,7 @@
         <div class="sub">
             {{ HTML::image('images/ialogo.png')}}
         </div>
+            {{--
         <div class="sub">
             <table class="contact">
                 <tbody>
@@ -192,7 +193,9 @@
                 </tr>
                 </tbody>
             </table>
+
         </div>
+            --}}
     </div>
     <div id="imghead">
         <div>
@@ -224,24 +227,18 @@
                         <tr>
                             <th class="item">Bed</th>
                             <th class="item">Bath</th>
-                            <th class="item">Garage</th>
                         </tr>
                         <tr>
                             <td>{{ $prop['bed']}}</td>
                             <td>{{ $prop['bath']}}</td>
-                            <td>{{ $prop['garage']}}</td>
                         </tr>
                     </tbody>
                 </table>
             </td>
         </tr>
-        <tr style="text-align:left;" id="tabhead" >
-            <th><h1>Overview</h1></th>
-            <th><h1>Financials</h1></th>
-        </tr>
         <tr>
             <td style="font-size:12px;">
-                <table class="financial" style="margin:0px;" >
+                <table class="financial" style="margin:0px;width:100%;" >
                     <tbody>
                         <tr>
                             <th class="item">Type</th>
@@ -253,11 +250,25 @@
                         </tr>
                         <tr>
                             <th class="item">Size</th>
-                            <td>{{ $prop['houseSize']}} Sq Ft</td>
+                            <td>{{ number_format($prop['houseSize'],0) }} sqft.</td>
+                        </tr>
+                        <tr>
+                            <th class="item">Lot Size</th>
+                            <td>
+                                @if( $prop['lotSize'] < 100)
+                                    {{ number_format($prop['lotSize'] * 43560,0) }} sqft
+                                @else
+                                    {{ $prop['lotSize'] }} sqft
+                                @endif
+                            </td>
                         </tr>
                         <tr>
                             <th class="item">Category</th>
                             <td>{{ ucwords( strtolower($prop['category'] ) ) }}</td>
+                        </tr>
+                        <tr>
+                            <th class="item">Property Management</th>
+                            <td>{{ ucwords( strtolower($prop['propertyManager'] ) ) }}</td>
                         </tr>
                         <tr>
                             <th colspan="2" class="item">Description</th>
@@ -269,19 +280,27 @@
                 </table>
             </td>
             <td style="font-size:12px;">
-                <table class="financial" style="margin:0px;" >
+                <table class="financial" style="margin:0px;width:100%;" >
                     <tbody>
                         <tr>
                             <th class="item">Price</th>
-                            <td>{{ number_format($prop['listingPrice'],2,'.',',') }}</td>
+                            <td>{{ Ks::usd($prop['listingPrice']) }}</td>
                         </tr>
                         <tr>
-                            <th class="item">ROI</th>
-                            <td>{{ Ks::roi($prop) }} %</td>
+                            <th class="item">FMV</th>
+                            <td>{{ Ks::usd($prop['FMV'])}}</td>
                         </tr>
                         <tr>
                             <th class="item">Monthly Rent</th>
                             <td>{{ Ks::usd($prop['monthlyRental'])}}</td>
+                        </tr>
+                        <tr>
+                            <th class="item">Tax</th>
+                            <td>{{ Ks::usd($prop['tax'])}}</td>
+                        </tr>
+                        <tr>
+                            <th class="item">Rental Yield</th>
+                            <td>{{ number_format((($prop['monthlyRental']*12)/$prop['listingPrice'])*100,1)}}%</td>
                         </tr>
                     </tbody>
                 </table>

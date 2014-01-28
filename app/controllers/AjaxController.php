@@ -420,5 +420,32 @@ class AjaxController extends BaseController {
 
     }
 
+    public function postChangestatus(){
+        $in = Input::get();
+
+        $trx_id = $in['trx_id'];
+
+        $status = $in['status'];
+
+        $trx = Transaction::find($trx_id);
+
+        $property = Property::find($trx['propObjectId']);
+
+        if($status == 'canceled'){
+            $property->propertyStatus = 'available';
+            $property->save();
+            $trx->orderStatus = $status;
+            $trx->save();
+        }else if($status == 'sold'){
+            $property->propertyStatus = 'sold';
+            $property->save();
+            $trx->orderStatus = $status;
+            $trx->save();
+        }
+
+        return Response::json(array('result'=>'OK'));
+
+    }
+
 }
 

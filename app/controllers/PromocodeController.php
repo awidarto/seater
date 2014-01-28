@@ -1,6 +1,6 @@
 <?php
 
-class TransactionController extends AdminController {
+class PromocodeController extends AdminController {
 
     public function __construct()
     {
@@ -12,7 +12,7 @@ class TransactionController extends AdminController {
         $this->crumb->append('Home','left',true);
         $this->crumb->append(strtolower($this->controller_name));
 
-        $this->model = new Transaction();
+        $this->model = new Promocode();
         //$this->model = DB::collection('documents');
 
     }
@@ -29,25 +29,17 @@ class TransactionController extends AdminController {
     {
 
         $this->heads = array(
-            array('Order Number',array('search'=>true,'sort'=>true)),
-            array('Property ID',array('search'=>true,'sort'=>true)),
-            array('Total Purchase',array('search'=>true,'sort'=>true)),
-            array('Order Status',array('search'=>true,'sort'=>true)),
-            array('Agent',array('search'=>true,'sort'=>true)),
-            array('First Name',array('search'=>false,'sort'=>false)),
-            array('Last Name',array('search'=>false,'sort'=>false)),
-            array('Number',array('search'=>true,'sort'=>true)),
-            array('Address',array('search'=>true,'sort'=>true)),
-            array('City',array('search'=>true,'sort'=>true)),
-            array('State',array('search'=>true,'sort'=>true)),
-            array('ZIP',array('search'=>true,'sort'=>true)),
+            array('Code',array('search'=>false,'sort'=>false)),
+            array('Value',array('search'=>true,'sort'=>true)),
+            array('Event',array('search'=>true,'sort'=>true)),
+            array('Expires',array('search'=>true,'sort'=>true,'date'=>true)),
             array('Created',array('search'=>true,'sort'=>true,'date'=>true)),
             array('Last Update',array('search'=>true,'sort'=>true,'date'=>true)),
         );
 
         //print $this->model->where('docFormat','picture')->get()->toJSON();
 
-        $this->title = 'Transactions';
+        $this->title = 'Promo Code';
 
         return parent::getIndex();
 
@@ -57,18 +49,10 @@ class TransactionController extends AdminController {
     {
 
         $this->fields = array(
-            array('orderNumber',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('propertyId',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('total_purchase',array('kind'=>'text','callback'=>'tousd','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('orderStatus',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('agentName',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('firstname',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('lastname',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('number',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('address',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('city',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('state',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('zipCode',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('code',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('value',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+            array('event',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('expires',array('kind'=>'date','query'=>'like','pos'=>'both','show'=>true)),
             array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
             array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
         );
@@ -111,27 +95,12 @@ class TransactionController extends AdminController {
         return parent::postEdit($id,$data);
     }
 
-    public function fulladdress($data){
-        if(isset($data['address_2'])){
-            return $data['address'].' '.$data['address_2'];
-        }else{
-            return $data['address'];
-        }
-    }
-
-    public function tousd($data){
-        return '$'.Ks::usd($data['total_purchase']);
-    }
-
     public function makeActions($data)
     {
-        $change = '<span class="chg act" rel="'.$data['orderNumber'].'" id="'.$data['_id'].'" ><i class="icon-edit"></i> Change Status</span>';
-        $delete = '<span class="del act" id="'.$data['_id'].'" ><i class="icon-trash"></i>Delete</span>';
-        $edit = '<a href="'.URL::to('transaction/edit/'.$data['_id']).'"><i class="icon-edit"></i>Update</a>';
-        $dl = '<a href="'.URL::to('pr/dl/'.$data['_id']).'" target="new"><i class="icon-download"></i> Download</a>';
-        $print = '<a href="'.URL::to('pr/print/'.$data['_id']).'" target="new"><i class="icon-print"></i> Print</a>';
+        $delete = '<span class="del" id="'.$data['_id'].'" ><i class="icon-trash"></i>Delete</span>';
+        $edit = '<a href="'.URL::to('event/edit/'.$data['_id']).'"><i class="icon-edit"></i>Update</a>';
 
-        $actions = $change.'<br />'.$dl.'<br />'.$print.'<br /><br />'.$delete;
+        $actions = $edit.'<br />'.$delete;
         return $actions;
     }
 
@@ -204,5 +173,3 @@ class TransactionController extends AdminController {
 
 
 }
-
-

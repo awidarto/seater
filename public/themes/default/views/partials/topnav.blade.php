@@ -12,8 +12,10 @@
         <li><a href="{{ URL::to('property') }}" {{ sa('property') }} >Property</a></li>
         <li><a href="{{ URL::to('agent') }}" {{ sa('agent') }} >Agents</a></li>
         <li><a href="{{ URL::to('buyer') }}" {{ sa('buyer') }} >Buyers</a></li>
+        <li><a href="{{ URL::to('transaction') }}" {{ sa('transaction') }} >Transactions</a></li>
 
         <li><a href="{{ URL::to('event') }}" {{ sa('event') }} >Events</a></li>
+        <li><a href="{{ URL::to('promocode') }}" {{ sa('promocode') }} >Promo Code</a></li>
 
         <li><a href="{{ URL::to('user') }}" {{ sa('user') }} >Admins</a></li>
         <li class="dropdown">
@@ -23,7 +25,7 @@
               </a>
             <ul class="dropdown-menu">
                 <li><a href="{{ URL::to('activity') }}" {{ sa('activity') }} >Activity Log</a></li>
-                <li><a href="{{ URL::to('siteaccess') }}" {{ sa('siteaccess') }} >Site Access</a></li>
+                <li><a href="{{ URL::to('access') }}" {{ sa('access') }} >Site Access</a></li>
             </ul>
         </li>
         <li class="dropdown">

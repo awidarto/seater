@@ -59,6 +59,8 @@ class AdminController extends Controller {
 
         $this->backlink = strtolower($this->controller_name);
 
+        Logger::access();
+
 	}
 
 

@@ -25,7 +25,7 @@
 
         <p>
             {{ Form::label('email', 'Email Address') }}
-            {{ Form::text('email', Input::old('email'), array('placeholder' => 'awesome@awesome.com')) }}
+            {{ Form::text('email', Input::old('email')) }}
         </p>
         <p>
             {{ Form:: label('password', 'Password') }}
