@@ -178,6 +178,23 @@
    </div>
 </div>
 
+<div id="prop-chg-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Change Property Status</h3>
+  </div>
+  <div class="modal-body">
+  	<h4 id="prop-trx-order"></h4>
+  	{{ Former::hidden('prop_id')->id('prop-trx-chg') }}
+  	{{ Former::select('status', 'Status')->options(Config::get('ia.publishing'))->id('prop-stat-chg')}}
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button class="btn btn-primary" id="prop-save-chg">Save changes</button>
+  </div>
+</div>
+
+
 <div id="chg-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -585,6 +602,16 @@
 
 		   	}
 
+			if ($(e.target).is('.propchg')) {
+				var _id = e.target.id;
+				var _rel = $(e.target).attr('rel');
+
+				$('#prop-chg-modal').modal();
+				$('#prop-trx-chg').val(_id);
+				$('#prop-trx-order').html('Property ID : ' + _rel);
+
+		   	}
+
 		});
 
 
@@ -603,6 +630,24 @@
 		$('#chg-modal').on('hidden', function () {
 			oTable.fnDraw();
 		})
+
+
+		$('#prop-save-chg').on('click',function(){
+            $.post('{{ URL::to('ajax/propchangestatus')}}',
+            {
+                trx_id:$('#prop-trx-chg').val(),
+                status:$('#prop-stat-chg').val()
+            },
+            function(data){
+				$('#prop-chg-modal').modal('hide');
+            },
+            'json');
+		});
+
+		$('#prop-chg-modal').on('hidden', function () {
+			oTable.fnDraw();
+		})
+
     });
   </script>
 
