@@ -273,14 +273,32 @@ class PropertyController extends AdminController {
     {
 
         $this->validator = array(
-            'number' => 'required',
-            'address' => 'required',
-            'city' => 'required',
-            'zipCode' => 'required',
-            'type' => 'required',
-            'yearBuilt' => 'required',
-            'FMV' => 'required',
-            'listingPrice' => 'required'
+            'FMV' =>'required',
+            'HOA' =>'required',
+            'address' =>'required',
+            'bath' =>'required',
+            'bed' =>'required',
+            'category' =>'required',
+            'city' =>'required',
+            'description' =>'required',
+            'houseSize' =>'required',
+            'insurance' =>'required',
+            'leaseStartDate' =>'required',
+            'leaseTerms' =>'required',
+            'listingPrice' =>'required',
+            'lotSize' =>'required',
+            'monthlyRental' =>'required',
+            'number' =>'required',
+            'propertyManager' =>'required',
+            'propertyStatus' =>'required',
+            'publishStatus' =>'required',
+            'section8' =>'required',
+            'state' =>'required',
+            'tax' =>'required',
+            'type' =>'required',
+            'yearBuilt' =>'required',
+            'zipCode' =>'required'
+
         );
 
         return parent::postAdd($data);
@@ -289,14 +307,31 @@ class PropertyController extends AdminController {
     public function postEdit($id,$data = null)
     {
         $this->validator = array(
-            'number' => 'required',
-            'address' => 'required',
-            'city' => 'required',
-            'zipCode' => 'required',
-            'type' => 'required',
-            'yearBuilt' => 'required',
-            'FMV' => 'required',
-            'listingPrice' => 'required'
+            'FMV' =>'required',
+            'HOA' =>'required',
+            'address' =>'required',
+            'bath' =>'required',
+            'bed' =>'required',
+            'category' =>'required',
+            'city' =>'required',
+            'description' =>'required',
+            'houseSize' =>'required',
+            'insurance' =>'required',
+            'leaseStartDate' =>'required',
+            'leaseTerms' =>'required',
+            'listingPrice' =>'required',
+            'lotSize' =>'required',
+            'monthlyRental' =>'required',
+            'number' =>'required',
+            'propertyManager' =>'required',
+            'propertyStatus' =>'required',
+            'publishStatus' =>'required',
+            'section8' =>'required',
+            'state' =>'required',
+            'tax' =>'required',
+            'type' =>'required',
+            'yearBuilt' =>'required',
+            'zipCode' =>'required'
         );
 
         return parent::postEdit($id,$data);

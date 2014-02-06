@@ -14,49 +14,49 @@
 
         <div class="row-fluid form-vertical">
             <div class="span4">
-                {{ Former::text('number','Street Number')->class('span12')->maxlength(6) }}
+                {{ Former::text('number','Street Number')->class('span12')->maxlength(6)->required() }}
             </div>
             <div class="span8">
-                {{ Former::text('address','Address')->class('span12') }}
+                {{ Former::text('address','Address')->class('span12')->required() }}
             </div>
         </div>
 
         <div class="row-fluid form-vertical">
             <div class="span4">
-                {{ Former::text('city','City')->class('span12') }}
+                {{ Former::text('city','City')->class('span12')->required() }}
             </div>
             <div class="span4">
-                {{ Former::select('state')->options(Config::get('country.us_states'))->label('States') }}
+                {{ Former::select('state')->options(Config::get('country.us_states'))->label('States')->required() }}
             </div>
             <div class="span4">
-                {{ Former::text('zipCode','ZIP')->class('span12')->maxlength(5) }}
+                {{ Former::text('zipCode','ZIP')->class('span12')->maxlength(5)->required() }}
             </div>
         </div>
 
         <div class="row-fluid form-vertical">
             <div class="span4">
-                {{ Former::select('type')->options(Config::get('ia.type'))->label('Type') }}
+                {{ Former::select('type')->options(Config::get('ia.type'))->label('Type')->required() }}
             </div>
             <div class="span6">
-                {{ Former::text('yearBuilt','Year Built')->class('span8')->maxlength(4)  }}
+                {{ Former::text('yearBuilt','Year Built')->class('span8')->maxlength(4)->required()  }}
             </div>
         </div>
 
         <div class="row-fluid form-vertical">
             <div class="span4">
-                {{ Former::text('FMV','FMV')->class('span12') }}
+                {{ Former::text('FMV','FMV')->class('span12')->required() }}
             </div>
             <div class="span5">
-                {{ Former::text('listingPrice','Listing Price')->class('span8') }}
+                {{ Former::text('listingPrice','Listing Price')->class('span8')->required() }}
             </div>
         </div>
 
         <div class="row-fluid form-vertical">
             <div class="span4">
-                {{ Former::text('bed','# of Bedroom')->class('span8') }}
+                {{ Former::text('bed','# of Bedroom')->class('span8')->required() }}
             </div>
             <div class="span4">
-                {{ Former::text('bath','# of Bathroom')->class('span8') }}
+                {{ Former::text('bath','# of Bathroom')->class('span8')->required() }}
             </div>
             <div class="span4">
                 {{ Former::text('garage','# of Garage')->class('span8') }}
@@ -74,10 +74,10 @@
 
         <div class="row-fluid form-vertical">
             <div class="span4">
-                {{ Former::text('houseSize','House Size (SqFt)')->class('span12') }}
+                {{ Former::text('houseSize','House Size (SqFt)')->class('span12')->required() }}
             </div>
             <div class="span6">
-                {{ Former::text('lotSize','Lot Size (SqFt)')->class('span6') }}
+                {{ Former::text('lotSize','Lot Size (SqFt)')->class('span6')->required() }}
             </div>
         </div>
 
@@ -85,7 +85,7 @@
 
         {{ Former::text('parcelNumber','Parcel Number')->class('span5') }}
 
-        {{ Former::textarea('description','Property Description')->class('span10 editor')->rows(8) }}
+        {{ Former::textarea('description','Property Description')->class('span10 editor')->rows(8)->required() }}
 
         {{ Former::text('tags','Tags')->class('tag_keyword') }}
 
@@ -121,49 +121,49 @@
 
         <div class="row-fluid form-vertical">
             <div class="span4">
-                {{ Former::select('propertyStatus')->options(Config::get('ia.publishing'))->label('Status') }}
+                {{ Former::select('propertyStatus')->options(Config::get('ia.publishing'))->label('Status')->required() }}
             </div>
             <div class="span5">
-                {{ Former::select('category')->options(Config::get('ia.category'))->label('Category') }}
+                {{ Former::select('category')->options(Config::get('ia.category'))->label('Category')->required() }}
             </div>
         </div>
 
         <div class="row-fluid form-vertical">
             <div class="span4">
-                {{ Former::text('monthlyRental','Monthly Rental')->class('span12') }}
+                {{ Former::text('monthlyRental','Monthly Rental')->class('span12')->required() }}
             </div>
             <div class="span5">
-                {{ Former::select('section8')->options(Config::get('ia.boolean'))->label('Section 8')->class('span7') }}
+                {{ Former::select('section8')->options(Config::get('ia.boolean'))->label('Section 8')->class('span7')->required() }}
             </div>
         </div>
 
 
         <div class="row-fluid form-vertical">
             <div class="span4">
-                {{ Former::text('leaseTerms','Lease Terms')->append('months')->class('span6')->maxlength(2) }}
+                {{ Former::text('leaseTerms','Lease Terms')->append('months')->class('span6')->maxlength(2)->required() }}
             </div>
             <div class="span5">
                 {{ Former::text('leaseStartDate','Lease Start Date')->class('span12 datepicker')
                     ->data_format('dd-mm-yyyy')
-                    ->append('<i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>') }}
+                    ->append('<i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>')->required() }}
             </div>
         </div>
 
         <div class="row-fluid form-vertical">
             <div class="span4">
-                {{ Former::text('HOA','HOA')->class('span12') }}
+                {{ Former::text('HOA','HOA')->class('span12')->required() }}
             </div>
             <div class="span4">
-                {{ Former::text('tax','Tax')->class('span12') }}
+                {{ Former::text('tax','Tax')->class('span12')->required() }}
             </div>
             <div class="span4">
-                {{ Former::text('insurance','Insurance')->class('span12') }}
+                {{ Former::text('insurance','Insurance')->class('span12')->required() }}
             </div>
         </div>
 
-        {{ Former::text('propertyManager','Property Manager') }}
+        {{ Former::text('propertyManager','Property Manager')->required() }}
 
-        {{ Former::textarea('specialConditionRemarks','Special Condition Remarks')->class('span10')->rows(8) }}
+        {{ Former::textarea('specialConditionRemarks','Special Condition Remarks (Admin Only)')->class('span10')->rows(8) }}
 
         <?php
             $fupload = new Fupload();

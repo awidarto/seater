@@ -217,7 +217,7 @@
 
     <table id="overviewtable" style="width:100%;padding:0px;margin-top:10px;">
         <tr>
-            <td style="background-color:orange;padding:8px;">
+            <td style="background-color:orange;padding:8px;width:50%;" >
                 <span class="title-span">{{$prop['number'].' '.$prop['address']}}</span>
                 <span class="title-span">{{$prop['city'].' '.$prop['state'].' '.$prop['zipCode']}}</span>
             </td>
@@ -241,7 +241,7 @@
                 <table class="financial" style="margin:0px;width:100%;" >
                     <tbody>
                         <tr>
-                            <th class="item">Type</th>
+                            <th class="item" style="width:50%" >Type</th>
                             <td>{{ $prop['type']}}</td>
                         </tr>
                         <tr>
@@ -274,7 +274,7 @@
                             <th colspan="2" class="item">Description</th>
                         </tr>
                         <tr>
-                            <td colspan="2" >{{ $prop['description']}}</td>
+                            <td colspan="2">{{ $prop['description']}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -301,6 +301,23 @@
                         <tr>
                             <th class="item">Rental Yield</th>
                             <td>{{ number_format((($prop['monthlyRental']*12)/$prop['listingPrice'])*100,1)}}%</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <?php
+
+                                    $address = $prop['number'].' '.$prop['address'].' '.$prop['city'].' '.$prop['state'].' '.$prop['zipCode'];
+                                    if($prop['type'] == 'LAND'){
+                                        $color = 'green';
+                                        $label = 'L';
+                                    }else{
+                                        $color = 'blue';
+                                        $label = 'H';
+                                    }
+                                    $address_url = urlencode($address);
+                                ?>
+                                <img src="http://maps.googleapis.com/maps/api/staticmap?center={{ $address_url }}&zoom=13&size=325x175&maptype=roadmap&markers=color:{{ $color }}%7Clabel:{{ $label }}%7C{{ $address_url }}&sensor=false" style="float:left"/>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

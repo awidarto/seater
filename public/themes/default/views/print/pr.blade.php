@@ -135,7 +135,7 @@
 </style>
 
             <?php
-                $address = $prop['number'].' '.$prop['address'].' '.$prop['city'].', '.$prop['state'].' '.$prop['zipCode'];
+                $address = $prop['number'].' '.$prop['address'].' '.$prop['city'].' '.$prop['state'].' '.$prop['zipCode'];
             ?>
 
     <div class="container" style="width:90%;">
@@ -165,7 +165,7 @@
                         @endif
                         <h5>
                             {{ $trx['address'] }}<br />
-                            {{ $trx['city']}}, {{ $trx['state']}} {{ (isset($trx['zipCode']))?$trx['zipCode']:''}}<br />
+                            {{ $trx['city']}} {{ $trx['state']}} {{ (isset($trx['zipCode']))?$trx['zipCode']:''}}<br />
                             {{ $trx['countryOfOrigin']}}
                         </h5>
                         <h5><b>Agent :</b> {{ $trx['agentName']}}</h5>
