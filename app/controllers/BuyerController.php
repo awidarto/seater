@@ -41,6 +41,7 @@ class BuyerController extends AdminController {
         );
 
         //print $this->model->where('docFormat','picture')->get()->toJSON();
+        $this->title = 'Buyers';
 
         return parent::getIndex();
 

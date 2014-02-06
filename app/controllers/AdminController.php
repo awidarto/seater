@@ -46,6 +46,8 @@ class AdminController extends Controller {
 
     public $makeActions = 'makeActions';
 
+    public $can_add = true;
+
 
 	public function __construct(){
 
@@ -133,6 +135,7 @@ class AdminController extends Controller {
 			->with('ajaxsource',URL::to($this->ajaxsource) )
 			->with('ajaxdel',URL::to($this->delurl) )
 			->with('crumb',$this->crumb )
+            ->with('can_add', $this->can_add )
 			->with('heads',$heads )
 			->with('row',$this->rowdetail );
 
@@ -503,7 +506,7 @@ class AdminController extends Controller {
 
 			if($obj = $model->insert($data)){
 
-				$obj = $this->afterSave($obj);
+				$obj = $this->afterSave($data);
 
 				//Event::fire('product.createformadmin',array($obj['_id'],$passwordRandom,$obj['conventionPaymentStatus']));
 		    	return Redirect::to($this->backlink)->with('notify_success',ucfirst(Str::singular($controller_name)).' saved successfully');

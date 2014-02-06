@@ -65,6 +65,7 @@ class AgentController extends AdminController {
         );
 
         //print $this->model->where('docFormat','picture')->get()->toJSON();
+        $this->title = 'Agents';
 
         return parent::getIndex();
 

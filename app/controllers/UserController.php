@@ -63,6 +63,7 @@ class UserController extends AdminController {
         );
 
         //print $this->model->where('docFormat','picture')->get()->toJSON();
+        $this->title = 'Administrators';
 
         return parent::getIndex();
 

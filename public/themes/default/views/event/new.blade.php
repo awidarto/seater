@@ -31,11 +31,11 @@
         @for($i = 1;$i < 6;$i++)
             <div class="row form-horizontal">
                 <div class="span4">
-                    {{ Former::text('code[]','Code '.$i)->class('span12')->maxlength('6') }}
+                    {{ Former::text('code_'.$i,'Code '.$i)->class('span12')->maxlength('6') }}
 
                 </div>
                 <div class="span4">
-                    {{ Former::text('val[]','Value '.$i)->class('span12')->maxlength('6') }}
+                    {{ Former::text('val_'.$i,'Value '.$i)->class('span12')->maxlength('6') }}
                 </div>
             </div>
         @endfor

@@ -41,6 +41,7 @@ class PromocodeController extends AdminController {
 
         $this->title = 'Promo Code';
 
+        $this->can_add = false;
         return parent::getIndex();
 
     }
@@ -51,7 +52,7 @@ class PromocodeController extends AdminController {
         $this->fields = array(
             array('code',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('value',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('event',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('eventName',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('expires',array('kind'=>'date','query'=>'like','pos'=>'both','show'=>true)),
             array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
             array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),

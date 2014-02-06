@@ -101,6 +101,65 @@ class EventController extends AdminController {
         return parent::postEdit($id,$data);
     }
 
+    public function afterSave($data)
+    {
+        //print_r($data);
+        //exit();
+
+        for($i = 1;$i < 6;$i++){
+
+            if($data['code_'.$i] != ""){
+                $promo = new Promocode();
+                $promo->code = $data['code_'.$i];
+                $promo->value = $data['val_'.$i];
+                $promo->eventName = $data['title'];
+                $promo->eventSlug = $data['slug'];
+                $promo->lastUpdate = new MongoDate();
+                $promo->createdDate = new MongoDate();
+                $promo->expires = $data['expires'];
+                $promo->save();
+            }
+
+        }
+
+        return $data;
+    }
+
+    public function afterUpdate($id,$data = null)
+    {
+
+        for($i = 1;$i < 6;$i++){
+
+            if($data['code_'.$i] != ""){
+                $promo = Promocode::where('eventSlug', '=', $data['slug'])->where('code','=',$data['code_'.$i])->first();
+
+                if(is_null($promo)){
+                    $promo = new Promocode();
+                    $promo->code = $data['code_'.$i];
+                    $promo->value = $data['val_'.$i];
+                    $promo->eventName = $data['title'];
+                    $promo->eventSlug = $data['slug'];
+                    $promo->lastUpdate = new MongoDate();
+                    $promo->createdDate = new MongoDate();
+                    $promo->expires = $data['expires'];
+                    $promo->save();
+
+                }else{
+                    $promo->value = $data['val_'.$i];
+                    $promo->lastUpdate = new MongoDate();
+                    $promo->expires = $data['expires'];
+                    $promo->save();
+                }
+
+            }
+
+
+        }
+
+        return $id;
+    }
+
+
     public function makeActions($data)
     {
         $delete = '<span class="del" id="'.$data['_id'].'" ><i class="icon-trash"></i>Delete</span>';

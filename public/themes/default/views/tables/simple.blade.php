@@ -30,7 +30,10 @@
 	<div class="span12 command-bar">
 
         <h3>{{ $title }}</h3>
-       	<a href="{{ URL::to($addurl) }}" class="btn btn-primary">Add</a>
+
+        @if(isset($can_add) && $can_add == true)
+	       	<a href="{{ URL::to($addurl) }}" class="btn btn-primary">Add</a>
+       	@endif
     <!--    <a href="#" id="pushmedia" class="btn btn-primary">Push Media Playlist</a> -->
 
 	   @if (Session::has('notify_operationalform'))

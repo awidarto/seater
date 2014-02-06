@@ -49,6 +49,8 @@ class TransactionController extends AdminController {
 
         $this->title = 'Transactions';
 
+        $this->can_add = false;
+
         return parent::getIndex();
 
     }

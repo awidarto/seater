@@ -53,6 +53,8 @@ class PropertyController extends AdminController {
 
         $this->title = 'Property';
 
+        $this->can_add = true;
+
         return parent::getIndex();
 
     }

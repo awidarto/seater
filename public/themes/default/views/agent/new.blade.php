@@ -11,14 +11,14 @@
     <div class="span6">
 
         {{ Former::select('salutation')->options(Config::get('kickstart.salutation'))->label('Salutation')->class('span1') }}
-        {{ Former::text('firstname','First Name') }}
-        {{ Former::text('lastname','Last Name') }}
-        {{ Former::text('mobile','Mobile') }}
+        {{ Former::text('firstname','First Name')->required() }}
+        {{ Former::text('lastname','Last Name')->required() }}
+        {{ Former::text('mobile','Mobile')->class('span3')->maxlength(15) }}
 
-        {{ Former::text('address_1','Address') }}
+        {{ Former::text('address_1','Address')->required() }}
         {{ Former::text('address_2','') }}
-        {{ Former::text('city','City') }}
-        {{ Former::text('zipCode','ZIP / Postal Code')->id('zip')->class('span2')->maxlength(5) }}
+        {{ Former::text('city','City')->required() }}
+        {{ Former::text('zipCode','ZIP / Postal Code')->id('zip')->class('span2')->maxlength(5)->required() }}
 
         <div class="us" style="display:none;">
             {{ Former::select('state')->class('us')->options(Config::get('country.us_states'))->label('State')->style('display:none;')->id('us_states') }}
@@ -27,16 +27,16 @@
             {{ Former::select('state')->class('au')->options(Config::get('country.aus_states'))->label('State')->style('display:none;')->id('au_states') }}
         </div>
         <div class="outside">
-            {{ Former::text('state','State / Province')->class('outside span6')->id('other_state') }}
+            {{ Former::text('state','State / Province')->class('outside span6')->id('other_state')->class('span3') }}
         </div>
 
-        {{ Former::select('countryOfOrigin')->id('country')->options(Config::get('country.countries'))->label('Country of Origin') }}
+        {{ Former::select('countryOfOrigin')->id('country')->options(Config::get('country.countries'))->label('Country of Origin')->required() }}
     </div>
     <div class="span6">
-        {{ Former::text('email','Email') }}
+        {{ Former::text('email','Email')->required() }}
 
-        {{ Former::password('pass','Password') }}
-        {{ Former::password('repass','Repeat Password') }}
+        {{ Former::password('pass','Password')->required() }}
+        {{ Former::password('repass','Repeat Password')->required() }}
 
     </div>
 </div>
