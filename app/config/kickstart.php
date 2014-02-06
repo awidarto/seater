@@ -10,6 +10,12 @@ return array(
             'Mr'=>'Mr',
             'Mrs'=>'Mrs',
             'Ms'=>'Ms',
+        ),
+
+    'admin_roles'=>array(
+        'root'=>'Superadmin',
+        'admin'=>'Admin',
+        'editor'=>'Content Editor'
         )
 
     );

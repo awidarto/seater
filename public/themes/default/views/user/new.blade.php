@@ -18,14 +18,25 @@
         {{ Former::text('address_1','Address') }}
         {{ Former::text('address_2','') }}
         {{ Former::text('city','City') }}
-        {{ Former::select('state')->options(Config::get('country.us_states'))->label('State') }}
-        {{ Former::select('countryOfOrigin')->options(Config::get('country.countries'))->label('Country of Origin') }}
+        <div class="us" style="display:none;">
+            {{ Former::select('state')->class('us')->options(Config::get('country.us_states'))->label('State')->style('display:none;')->id('us_states') }}
+        </div>
+        <div class="au" style="display:none;">
+            {{ Former::select('state')->class('au')->options(Config::get('country.aus_states'))->label('State')->style('display:none;')->id('au_states') }}
+        </div>
+        <div class="outside">
+            {{ Former::text('state','State / Province')->class('outside span3')->id('other_state') }}
+        </div>
+
+        {{ Former::select('countryOfOrigin')->id('country')->options(Config::get('country.countries'))->label('Country of Origin') }}
     </div>
     <div class="span6">
         {{ Former::text('email','Email') }}
 
         {{ Former::password('pass','Password') }}
         {{ Former::password('repass','Repeat Password') }}
+
+        {{ Former::select('role')->options(Config::get('kickstart.admin_roles'))->label('Role')}}
 
     </div>
 </div>
@@ -41,6 +52,33 @@
 <script type="text/javascript">
 
 $(document).ready(function() {
+
+    $('#country').on('change',function(){
+        var country = $('#country').val();
+
+        if(country == 'Australia'){
+            $('.au').show();
+            $('.us').hide();
+            $('.outside').hide();
+            $('select').select2({
+              width : 'resolve'
+            });
+        }else if(country == 'United States of America'){
+            $('.au').hide();
+            $('.us').show();
+            $('.outside').hide();
+            $('select').select2({
+              width : 'resolve'
+            });
+        }else{
+            $('.au').hide();
+            $('.us').hide();
+            $('.outside').show();
+        }
+
+
+    });
+
 
     $('select').select2({
       width : 'resolve'

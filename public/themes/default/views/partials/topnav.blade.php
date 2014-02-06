@@ -9,7 +9,10 @@
 ?>
 <ul class="nav">
     @if(Auth::check())
+
         <li><a href="{{ URL::to('property') }}" {{ sa('property') }} >Property</a></li>
+
+        @if(Auth::user()->role == 'root' || Auth::user()->role == 'admin')
         <li><a href="{{ URL::to('agent') }}" {{ sa('agent') }} >Agents</a></li>
         <li><a href="{{ URL::to('buyer') }}" {{ sa('buyer') }} >Buyers</a></li>
         <li><a href="{{ URL::to('transaction') }}" {{ sa('transaction') }} >Transactions</a></li>
@@ -28,6 +31,8 @@
                 <li><a href="{{ URL::to('access') }}" {{ sa('access') }} >Site Access</a></li>
             </ul>
         </li>
+        @endif
+        @if(Auth::user()->role == 'root' || Auth::user()->role == 'admin' || Auth::user()->role == 'editor')
         <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                 FAQ
@@ -51,5 +56,6 @@
                 <li><a href="{{ URL::to('video') }}" {{ sa('video') }} >Promo Videos</a></li>
             </ul>
         </li>
+        @endif
     @endif
 </ul>
