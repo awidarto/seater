@@ -343,6 +343,7 @@ Route::post('login',function(){
                 // validation not successful
                 // send back to form with errors
                 // send back to form with old input, but not the password
+                Session::flash('loginError', 'Email and password mismatch');
                 return Redirect::to('login')
                     ->withErrors($validator)
                     ->withInput(Input::except('password'));
