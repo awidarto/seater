@@ -21,6 +21,7 @@ return array(
             'available'=>'Available for Sale',
             'reserved'=>'Reserved',
             'pending'=>'Pending Sales',
+            'under contract'=>'Under Contract',
             'sold'=>'Sold'
         ),
     'search_publishing'=>array(
@@ -30,19 +31,38 @@ return array(
             'available'=>'Available for Sale',
             'reserved'=>'Reserved',
             'pending'=>'Pending Sales',
+            'under contract'=>'Under Contract',
             'sold'=>'Sold'
         ),
 
+    'trx_status'=>array(
+            'reserved'=>'Reserved',
+            'pending'=>'Pending Sales',
+            'under contract'=>'Under Contract',
+            'sold'=>'Sold',
+            'canceled'=>'Canceled'
+        ),
+    'search_trx_status'=>array(
+            ''=>'All',
+            'reserved'=>'Reserved',
+            'pending'=>'Pending Sales',
+            'under contract'=>'Under Contract',
+            'sold'=>'Sold',
+            'canceled'=>'Canceled'
+        ),
+
     'eventcat'=>array(
-            'Road Show'=>'Road Show',
-            'Trade Show'=>'Trade Show',
+            'Seminar'=>'Seminar',
+            'Lunch Gathering'=>'Lunch Gathering',
             'Exhibition'=>'Exhibition',
+            'Buying Summit'=>'Buying Summit',
         ),
     'search_eventcat'=>array(
             ''=>'All',
-            'Road Show'=>'Road Show',
-            'Trade Show'=>'Trade Show',
+            'Seminar'=>'Seminar',
+            'Lunch Gathering'=>'Lunch Gathering',
             'Exhibition'=>'Exhibition',
+            'Buying Summit'=>'Buying Summit',
         ),
 
 

@@ -31,16 +31,14 @@ class TransactionController extends AdminController {
         $this->heads = array(
             array('Order Number',array('search'=>true,'sort'=>true)),
             array('Property ID',array('search'=>true,'sort'=>true)),
-            array('Total Purchase',array('search'=>true,'sort'=>true)),
+            array('Property Address',array('search'=>true,'sort'=>true)),
             array('Order Status',array('search'=>true,'sort'=>true)),
             array('Agent',array('search'=>true,'sort'=>true)),
-            array('First Name',array('search'=>false,'sort'=>false)),
-            array('Last Name',array('search'=>false,'sort'=>false)),
-            array('Number',array('search'=>true,'sort'=>true)),
-            array('Address',array('search'=>true,'sort'=>true)),
-            array('City',array('search'=>true,'sort'=>true)),
-            array('State',array('search'=>true,'sort'=>true)),
-            array('ZIP',array('search'=>true,'sort'=>true)),
+            array('Buyer First Name',array('search'=>false,'sort'=>false)),
+            array('Buyer Last Name',array('search'=>false,'sort'=>false)),
+            array('Buyer Email',array('search'=>false,'sort'=>false)),
+            array('Total Purchase',array('search'=>true,'sort'=>true)),
+            array('EMD',array('search'=>true,'sort'=>true)),
             array('Created',array('search'=>true,'sort'=>true,'date'=>true)),
             array('Last Update',array('search'=>true,'sort'=>true,'date'=>true)),
         );
@@ -61,16 +59,14 @@ class TransactionController extends AdminController {
         $this->fields = array(
             array('orderNumber',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('propertyId',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('total_purchase',array('kind'=>'text','callback'=>'tousd','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+            array('propertyAddress',array('kind'=>'text','callback'=>'propAddress','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
             array('orderStatus',array('kind'=>'text', 'callback'=>'statcolor' ,'query'=>'like','pos'=>'both','show'=>true)),
             array('agentName',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('firstname',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('lastname',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('number',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('address',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('city',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('state',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('zipCode',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('email',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('total_purchase',array('kind'=>'text','callback'=>'tousd','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+            array('earnestMoney',array('kind'=>'text','callback'=>'etousd','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
             array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
             array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
         );
@@ -121,6 +117,14 @@ class TransactionController extends AdminController {
         }
     }
 
+    public function propAddress($data){
+        return $data['propertyNumber'].' '.$data['propertyAddress'].' '.$data['propertyState'].' '.$data['propertyZipCode'];
+    }
+
+    public function etousd($data){
+        return '$'.Ks::usd($data['earnestMoney']);
+    }
+
     public function tousd($data){
         return '$'.Ks::usd($data['total_purchase']);
     }
@@ -131,7 +135,7 @@ class TransactionController extends AdminController {
 
     public function makeActions($data)
     {
-        $change = '<span class="chg act" rel="'.$data['orderNumber'].'" id="'.$data['_id'].'" ><i class="icon-edit"></i> Change Status</span>';
+        $change = '<span class="chg act" data-status="'.$data['orderStatus'].'" rel="'.$data['orderNumber'].'" id="'.$data['_id'].'" ><i class="icon-edit"></i> Change Status</span>';
         $delete = '<span class="del act" id="'.$data['_id'].'" ><i class="icon-trash"></i>Delete</span>';
         $edit = '<a href="'.URL::to('transaction/edit/'.$data['_id']).'"><i class="icon-edit"></i>Update</a>';
         $dl = '<a href="'.URL::to('pr/dl/'.$data['_id']).'" target="new"><i class="icon-download"></i> Download</a>';

@@ -206,7 +206,7 @@
   <div class="modal-body">
   	<h4 id="trx-order"></h4>
   	{{ Former::hidden('trx_id')->id('trx-chg') }}
-  	{{ Former::select('status', 'Status')->options(array('sold'=>'Sold', 'canceled'=>'Cancel'))->id('stat-chg')}}
+  	{{ Former::select('status', 'Status')->options(Config::get('ia.trx_status'))->id('stat-chg')}}
   </div>
   <div class="modal-footer">
     <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
@@ -255,7 +255,7 @@
 	}
 
     $(document).ready(function(){
-
+    	/*
     	$.fn.dataTableExt.oApi.fnStandingRedraw = function(oSettings) {
 		    if(oSettings.oFeatures.bServerSide === false){
 		        var before = oSettings._iDisplayStart;
@@ -270,6 +270,7 @@
 		    // draw the 'current' page
 		    oSettings.oApi._fnDraw(oSettings);
 		};
+		*/
 
 		$('.activity-list').tooltip();
 
@@ -307,6 +308,7 @@
 		                "success": fnCallback
 		            } );
 		        }
+
 			}
         );
 
@@ -400,9 +402,10 @@
 		} );
 
 		$('#clearsearch').click(function(){
-			$('thead input').val('');
+			$('thead td input').val('');
 			$('input.dateinput').change();
 			$('input.datetimeinput').change();
+			console.log('reloading table');
 			oTable.fnDraw();
 		});
 		/*
@@ -596,10 +599,12 @@
 			if ($(e.target).is('.chg')) {
 				var _id = e.target.id;
 				var _rel = $(e.target).attr('rel');
+				var _status = $(e.target).data('status');
 
 				$('#chg-modal').modal();
 
 				$('#trx-chg').val(_id);
+				$('#stat-chg').val(_status);
 
 				$('#trx-order').html('Order # : ' + _rel);
 
@@ -608,9 +613,13 @@
 			if ($(e.target).is('.propchg')) {
 				var _id = e.target.id;
 				var _rel = $(e.target).attr('rel');
+				var _status = $(e.target).data('status');
+
+				console.log(_status);
 
 				$('#prop-chg-modal').modal();
 				$('#prop-trx-chg').val(_id);
+				$('#prop-stat-chg').val(_status);
 				$('#prop-trx-order').html('Property ID : ' + _rel);
 
 		   	}

@@ -231,7 +231,7 @@ $(document).ready(function() {
       parserRules:  wysihtml5ParserRules // defined in parser rules set
     });
 
-    var url = '{{ URL::to('upload') }}';
+    var url = '{{ URL::to('upload/cover') }}';
     var murl = '{{ URL::to('upload/music') }}';
 
     $('#fileupload').fileupload({

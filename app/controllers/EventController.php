@@ -68,7 +68,10 @@ class EventController extends AdminController {
 
     public function beforeSave($data)
     {
-
+        $defaultexpiry = Carbon::fromDate($data['toDate'])->addWeeks(2);
+        if($data['expires'] == '') {
+            $data['expires'] = new MongoDate($defaultexpiry);
+        }
         return $data;
     }
 

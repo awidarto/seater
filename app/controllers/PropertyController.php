@@ -353,7 +353,7 @@ class PropertyController extends AdminController {
 
     public function makeActions($data)
     {
-        $change = '<span class="propchg act" rel="'.$data['propertyId'].'" id="'.$data['_id'].'" ><i class="icon-edit"></i> Change Status</span>';
+        $change = '<span class="propchg act" data-status="'.$data['propertyStatus'].'" rel="'.$data['propertyId'].'" id="'.$data['_id'].'" ><i class="icon-edit"></i> Change Status</span>';
         $delete = '<span class="del" id="'.$data['_id'].'" ><i class="icon-trash"></i> Delete</span>';
         $edit = '<a href="'.URL::to('property/edit/'.$data['_id']).'"><i class="icon-edit"></i> Update</a>';
         $dl = '<a href="'.URL::to('brochure/dl/'.$data['_id']).'" target="new"><i class="icon-download"></i> Download</a>';
