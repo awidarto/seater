@@ -98,7 +98,7 @@ Route::get('tofin',function(){
         $p->insurance = $p->insurance;
         $p->maintenanceAllowance = $p->annualRental * 0.1;
         $p->vacancyAllowance = $p->annualRental * 0.05;
-        $p->propManagement = $p->annualRental * 0.05;
+        $p->propManagement = $p->annualRental * 0.1;
 
         if($p->FMV > 0){
             $p->equity = (($p->FMV - $p->listingPrice ) / $p->FMV ) * 100;
@@ -107,8 +107,8 @@ Route::get('tofin',function(){
         }
         $p->dpsqft = $p->listingPrice / $p->houseSize;
         if($p->annualRental > 0){
-            $p->ROI = ($p->annualRental - ( $p->tax + $p->propManagement + $p->insurance)) / $p->annualRental * 100;
-            $p->ROIstar = ($p->annualRental - ( $p->tax + $p->propManagement + $p->insurance + $p->vacancyAllowance + $p->maintenanceAllowance)) / $p->annualRental * 100;
+            $p->ROI = ($p->annualRental - ( $p->tax + $p->propManagement + $p->insurance)) / $p->listingPrice * 100;
+            $p->ROIstar = ($p->annualRental - ( $p->tax + $p->propManagement + $p->insurance + $p->vacancyAllowance + $p->maintenanceAllowance )) / $p->listingPrice * 100;
             $p->OPR = ($p->monthlyRental / $p->listingPrice )*100;
             $p->RentalYield = ($p->annualRental / $p->listingPrice) * 100 ;
 

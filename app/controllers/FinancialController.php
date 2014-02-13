@@ -74,8 +74,8 @@ class FinancialController extends AdminController {
         $this->fields = array(
             array('propertyId',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
             array('address',array('kind'=>'text','callback'=>'propAddress','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('listingPrice',array('kind'=>'text' ,'query'=>'like','pos'=>'both','show'=>true)),
-            array('FMV',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('listingPrice',array('kind'=>'text' ,'callback'=>'lpusd','query'=>'like','pos'=>'both','show'=>true)),
+            array('FMV',array('kind'=>'text','callback'=>'fmvusd','query'=>'like','pos'=>'both','show'=>true)),
             array('equity',array('kind'=>'text', 'callback'=>'statcolor' ,'query'=>'like','pos'=>'both','show'=>true)),
 
 
@@ -163,12 +163,20 @@ class FinancialController extends AdminController {
         return '$'.Ks::usd($data['total_purchase']);
     }
 
+    public function lpusd($data){
+        return '$'.Ks::usd($data['listingPrice']);
+    }
+
+    public function fmvusd($data){
+        return '$'.Ks::usd($data['FMV']);
+    }
+
     public function roi($data){
-        return number_format($data['ROI'],0);
+        return number_format($data['ROI'],1);
     }
 
     public function roistar($data){
-        return number_format($data['ROIstar'],0);
+        return number_format($data['ROIstar'],1);
     }
 
     public function rentalyield($data){
@@ -176,7 +184,7 @@ class FinancialController extends AdminController {
     }
 
     public function opr($data){
-        return number_format($data['OPR'],1);
+        return number_format($data['OPR'],2);
     }
 
     public function statcolor($data){
