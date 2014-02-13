@@ -74,8 +74,8 @@ class FinancialController extends AdminController {
         $this->fields = array(
             array('propertyId',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
             array('propertyAddress',array('kind'=>'text','callback'=>'propAddress','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('listingPrice',array('kind'=>'text', 'callback'=>'statcolor' ,'query'=>'like','pos'=>'both','show'=>true)),
-            array('FMV',array('kind'=>'text', 'callback'=>'statcolor' ,'query'=>'like','pos'=>'both','show'=>true)),
+            array('listingPrice',array('kind'=>'text' ,'query'=>'like','pos'=>'both','show'=>true)),
+            array('FMV',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('equity',array('kind'=>'text', 'callback'=>'statcolor' ,'query'=>'like','pos'=>'both','show'=>true)),
 
 
@@ -152,7 +152,7 @@ class FinancialController extends AdminController {
     }
 
     public function propAddress($data){
-        return $data['propertyNumber'].' '.$data['propertyAddress'].' '.$data['propertyState'].' '.$data['propertyZipCode'];
+        return $data['number'].' '.$data['address'].' '.$data['propertyState'].' '.$data['zipCode'];
     }
 
     public function etousd($data){
