@@ -119,6 +119,10 @@ Route::get('tofin',function(){
             $p->RentalYield = 0 ;
         }
 
+        $p->tax = new MongoInt32( $p->tax);
+        $p->insurance = new MongoInt32($p->insurance);
+
+
         print_r($p->toArray());
 
         $p->save();
