@@ -15,6 +15,7 @@ Route::controller('property', 'PropertyController');
 Route::controller('user', 'UserController');
 Route::controller('agent', 'AgentController');
 Route::controller('buyer', 'BuyerController');
+Route::controller('potential', 'PotentialController');
 Route::controller('report', 'ReportController');
 Route::controller('pages', 'PagesController');
 Route::controller('posts', 'PostsController');
@@ -23,6 +24,7 @@ Route::controller('menu', 'MenuController');
 
 Route::controller('promocode', 'PromocodeController');
 Route::controller('transaction', 'TransactionController');
+Route::controller('financial', 'FinancialController');
 
 Route::controller('faq', 'FaqController');
 Route::controller('faqcat', 'FaqcatController');
@@ -79,6 +81,44 @@ Route::get('regenerate',function(){
     }
 
 });
+
+Route::get('tofin',function(){
+    $property = new Property();
+
+    $props = $property->get();
+
+    foreach($props as $p){
+        $p->monthlyRental = $p->monthlyRental;
+
+        $p->annualRental = 12 * $p->monthlyRental;
+
+        $p->insurance = ($p->insurance == 0 || $p->insurance == '')?800:$p->insurance;
+
+        $p->tax = $p->tax;
+        $p->insurance = $p->insurance;
+        $p->maintenanceAllowance = $p->annualRental * 0.1;
+        $p->vacancyAllowance = $p->annualRental * 0.05;
+        $p->propManagement = $p->annualRental * 0.05;
+
+        if($p->FMV > 0){
+            $p->equity = (($p->FMV - $p->listingPrice ) / $p->FMV ) * 100;
+        }else{
+            $p->equity = 0;
+        }
+        $p->dpsqft = $p->listingPrice / $p->houseSize;
+        $p->ROI = ($p->annualRental - ( $p->tax + $p->propManagement + $p->insurance)) / $p->annualRental * 100;
+        $p->ROIstar = ($p->annualRental - ( $p->tax + $p->propManagement + $p->insurance + $p->vacancyAllowance + $p->maintenanceAllowance)) / $p->annualRental * 100;
+        $p->OPR = ($p->monthlyRental / $p->listingPrice )*100;
+        $p->RentalYield = ($p->annualRental / $p->listingPrice) * 100 ;
+
+        print_r($p->toArray());
+
+        $p->save();
+
+    }
+
+});
+
 
 Route::get('tonumber',function(){
     $property = new Property();

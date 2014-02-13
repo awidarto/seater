@@ -14,7 +14,16 @@
 
         @if(Auth::user()->role == 'root' || Auth::user()->role == 'admin')
         <li><a href="{{ URL::to('agent') }}" {{ sa('agent') }} >Agents</a></li>
-        <li><a href="{{ URL::to('buyer') }}" {{ sa('buyer') }} >Buyers</a></li>
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                Buyers
+                <b class="caret"></b>
+              </a>
+            <ul class="dropdown-menu">
+                <li><a href="{{ URL::to('buyer') }}" {{ sa('buyer') }} >Buyers</a></li>
+                <li><a href="{{ URL::to('potential') }}" {{ sa('potential') }} >Potential Buyers</a></li>
+            </ul>
+        </li>
         <li><a href="{{ URL::to('transaction') }}" {{ sa('transaction') }} >Transactions</a></li>
 
         <li><a href="{{ URL::to('event') }}" {{ sa('event') }} >Events</a></li>
@@ -27,6 +36,7 @@
                 <b class="caret"></b>
               </a>
             <ul class="dropdown-menu">
+                <li><a href="{{ URL::to('financial') }}" {{ sa('financial') }} >Financial Return</a></li>
                 <li><a href="{{ URL::to('activity') }}" {{ sa('activity') }} >Activity Log</a></li>
                 <li><a href="{{ URL::to('access') }}" {{ sa('access') }} >Site Access</a></li>
             </ul>

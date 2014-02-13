@@ -406,7 +406,8 @@
 			$('input.dateinput').change();
 			$('input.datetimeinput').change();
 			console.log('reloading table');
-			oTable.fnDraw();
+			oTable.fnClearTable(1);
+			//oTable.fnDraw();
 		});
 		/*
 		 * Support functions to provide a little bit of 'user friendlyness' to the textboxes in
