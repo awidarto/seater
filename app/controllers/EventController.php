@@ -59,7 +59,7 @@ class EventController extends AdminController {
             array('toDate',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('category',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('tags',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
+            array('createdDate',array('kind'=>'date','query'=>'like','pos'=>'both','show'=>true)),
             array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
         );
 

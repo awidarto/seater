@@ -256,9 +256,9 @@ class AdminController extends Controller {
 
 				}elseif($type == 'date'|| $type == 'datetime'){
 					$datestring = Input::get('sSearch_'.$idx);
-                    $datestring = date('d-m-Y', strtotime($datestring));
+                    $datestring = date('d-m-Y', $datestring / 1000);
 
-					if (($timestamp = strtotime($datestring)) === false) {
+					if (($timestamp = $datestring) === false) {
 					} else {
 						$daystart = new MongoDate(strtotime($datestring.' 00:00:00'));
 						$dayend = new MongoDate(strtotime($datestring.' 23:59:59'));
@@ -378,7 +378,7 @@ class AdminController extends Controller {
 
 						if( isset($field[1]['callback']) && $field[1]['callback'] != ''){
 							$callback = $field[1]['callback'];
-							$row[] = $this->$callback($doc);
+							$row[] = $this->$callback($doc, $field[0]);
 						}else{
 							if($field[1]['kind'] == 'datetime'){
                                 if($doc[$field[0]] instanceof MongoDate){

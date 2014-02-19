@@ -34,31 +34,8 @@
         @if(isset($can_add) && $can_add == true)
 	       	<a href="{{ URL::to($addurl) }}" class="btn btn-primary">Add</a>
        	@endif
-    <!--    <a href="#" id="pushmedia" class="btn btn-primary">Push Media Playlist</a> -->
-
-	   @if (Session::has('notify_operationalform'))
-	        <div class="alert alert-error">
-	             {{Session::get('notify_operationalform')}}
-	        </div>
-	    @endif
 	 </div>
 </div>
-
-<script type="text/javascript">
-    $(document).ready(function(){
-
-        $('#pushmedia').click(function(){
-
-            $.get('{{ URL::to('ajax/push') }}',function(data){
-                console.log(data);
-            })
-
-            alert('playlist pushed');
-            return false;
-        });
-
-    });
-</script>
 
 <div class="row-fluid">
    <div class="span12">
@@ -121,6 +98,11 @@
 			    		@if(isset($in[1]['search']) && $in[1]['search'] == true)
 			    			@if(isset($in[1]['date']) && $in[1]['date'])
 				        		<td>
+									<div class="input-append date datepickersearch" id="{{ $index }}" data-date="" data-date-format="dd-mm-yyyy">
+									    <input class="span8 search_init dateinput" size="16" type="text" value="" placeholder="{{$in[0]}}" >
+									    <span class="add-on"><i class="icon-th"></i></span>
+									</div>
+									{{--
 									<div id="{{ $index }}" class="input-append datepickersearch">
 									    <input id="{{ $index }}" name="search_{{$in[0]}}" data-format="dd-MM-yyyy" class="search_init dateinput" type="text" placeholder="{{$in[0]}}" ></input>
 									    <span class="add-on">
@@ -128,9 +110,17 @@
 											</i>
 									    </span>
 									</div>
+
+									--}}
+
 				        		</td>
 			    			@elseif(isset($in[1]['datetime']) && $in[1]['datetime'])
 				        		<td>
+									<div class="input-append date datetimepickersearch" id="{{ $index }}" data-date="" data-date-format="dd-mm-yyyy">
+									    <input class="span8 search_init datetimeinput" size="16" type="text" value="" placeholder="{{$in[0]}}" >
+									    <span class="add-on"><i class="icon-th"></i></span>
+									</div>
+									{{--
 									<div id="{{ $index }}" class="input-append datetimepickersearch">
 									    <input id="{{ $index }}" name="search_{{$in[0]}}" data-format="dd-MM-yyyy hh:mm:ss" class="search_init datetimeinput" type="text" placeholder="{{$in[0]}}" ></input>
 									    <span class="add-on">
@@ -138,6 +128,7 @@
 											</i>
 									    </span>
 									</div>
+									--}}
 				        		</td>
 			    			@elseif(isset($in[1]['select']) && is_array($in[1]['select']))
 			    				<td>
@@ -343,44 +334,32 @@
 			oTable.fnFilter( this.value, search_index );
 		} );
 
-		$('thead input.dateinput').change( function () {
-			//console.log($('thead input').index(this));
-			var search_index = this.id;
-			oTable.fnFilter( this.value,  search_index  );
-		} );
-
-		$('thead input.datetimeinput').change( function () {
-			/* Filter on the column (the index) of this element */
-			//console.log($('thead input').index(this));
-			//var search_index = $('thead input').index(this);
-			var search_index = this.id;
-			oTable.fnFilter( this.value,  search_index  );
-		} );
-
 		eldatetime = $('.datetimepickersearch').datetimepicker({
-			maskInput: false,
+			minView:2,
+			maxView:2
 		});
 
 		eldate = $('.datepickersearch').datetimepicker({
-			maskInput: false,
-			pickTime: false
+			minView:2,
+			maxView:2
 		});
 
-
 		eldate.on('changeDate', function(e) {
-			if(e.localDate != null){
-				var dateval = e.localDate.toString();
+
+			if(e.date.valueOf() != null){
+				var dateval = e.date.valueOf();
 			}else{
 				var dateval = '';
 			}
-			var search_index = e.target.id;
+			var search_index = e.currentTarget.id;
 
 			oTable.fnFilter( dateval, search_index );
 		});
 
 		eldatetime.on('changeDate', function(e) {
-			if(e.localDate != null){
-				var dateval = e.localDate.toString();
+
+			if(e.date.valueOf() != null){
+				var dateval = e.date.valueOf();
 			}else{
 				var dateval = '';
 			}
@@ -403,11 +382,17 @@
 
 		$('#clearsearch').click(function(){
 			$('thead td input').val('');
-			$('input.dateinput').change();
-			$('input.datetimeinput').change();
+
 			console.log('reloading table');
-			oTable.fnClearTable(1);
-			//oTable.fnDraw();
+			//oTable.fnClearTable(1);
+
+			$('thead td input').each(function(){
+				console.log(this.id);
+				var index = this.id;
+				oTable.fnFilter('',index);
+			});
+
+			oTable.fnFilter('');
 		});
 		/*
 		 * Support functions to provide a little bit of 'user friendlyness' to the textboxes in
@@ -659,7 +644,16 @@
 
 		$('#prop-chg-modal').on('hidden', function () {
 			oTable.fnDraw();
-		})
+		});
+
+		function dateFormat(indate) {
+	        var yyyy = indate.getFullYear().toString();
+	        var mm = (indate.getMonth()+1).toString(); // getMonth() is zero-based
+	        var dd  = indate.getDate().toString();
+
+	        return (dd[1]?dd:"0"+dd[0]) + '-' + (mm[1]?mm:"0"+mm[0]) + '-' + yyyy;
+   		}
+
 
     });
   </script>

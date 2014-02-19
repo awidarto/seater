@@ -37,9 +37,9 @@ class FinancialController extends AdminController {
 
             array('Bed',array('search'=>true,'sort'=>false)),
             array('Bath',array('search'=>true,'sort'=>true)),
-            array('Pool',array('search'=>true,'sort'=>true)),
-            array('Garage',array('search'=>true,'sort'=>true)),
-            array('Basement',array('search'=>true,'sort'=>true)),
+            //array('Pool',array('search'=>true,'sort'=>true)),
+            //array('Garage',array('search'=>true,'sort'=>true)),
+            //array('Basement',array('search'=>true,'sort'=>true)),
 
             array('Year Built',array('search'=>true,'sort'=>true)),
             array('Sqft',array('search'=>true,'sort'=>true)),
@@ -74,31 +74,31 @@ class FinancialController extends AdminController {
         $this->fields = array(
             array('propertyId',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
             array('address',array('kind'=>'text','callback'=>'propAddress','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('listingPrice',array('kind'=>'text' ,'callback'=>'lpusd','query'=>'like','pos'=>'both','show'=>true)),
-            array('FMV',array('kind'=>'text','callback'=>'fmvusd','query'=>'like','pos'=>'both','show'=>true)),
-            array('equity',array('kind'=>'text', 'callback'=>'statcolor' ,'query'=>'like','pos'=>'both','show'=>true)),
+            array('listingPrice',array('kind'=>'text' ,'callback'=>'tousd','query'=>'like','pos'=>'both','show'=>true)),
+            array('FMV',array('kind'=>'text','callback'=>'tousd','query'=>'like','pos'=>'both','show'=>true)),
+            array('equity',array('kind'=>'text','callback'=>'onedigit' ,'query'=>'like','pos'=>'both','show'=>true)),
 
 
             array('bed',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('bath',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('pool',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('garage',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('basement',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            //array('pool',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            //array('garage',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            //array('basement',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
 
             array('yearBuilt',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('houseSize',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('lotSize',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('section8',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('monthlyRental',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+            array('houseSize',array('kind'=>'text','callback'=>'usnumber','query'=>'like','pos'=>'both','show'=>true)),
+            array('lotSize',array('kind'=>'text','callback'=>'usnumber','query'=>'like','pos'=>'both','show'=>true)),
+            array('section8',array('kind'=>'text','callback'=>'usnumber','query'=>'like','pos'=>'both','show'=>true)),
+            array('monthlyRental',array('kind'=>'text','callback'=>'usnumber','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
             array('tax',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('insurance',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+            array('insurance',array('kind'=>'text','callback'=>'usnumber', 'query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
 
             array('propManagement',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
             array('RentalYield',array('kind'=>'text','callback'=>'rentalyield','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
 
-            array('ROI',array('kind'=>'text','query'=>'like','callback'=>'roi','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('ROIstar',array('kind'=>'text','query'=>'like','callback'=>'roistar','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('OPR',array('kind'=>'text','query'=>'like','callback'=>'opr','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+            array('ROI',array('kind'=>'text','query'=>'like','callback'=>'onedigit','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+            array('ROIstar',array('kind'=>'text','query'=>'like','callback'=>'onedigit','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+            array('OPR',array('kind'=>'text','query'=>'like','callback'=>'twodigit','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
 
 
             array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
@@ -155,20 +155,29 @@ class FinancialController extends AdminController {
         return $data['number'].' '.$data['address'].' '.$data['state'].' '.$data['zipCode'];
     }
 
-    public function etousd($data){
-        return '$'.Ks::usd($data['earnestMoney']);
+    public function tousd($data, $fieldname = null){
+        $fieldname = is_null($fieldname)? 'total_purchase':$fieldname;
+        return '$'.Ks::usd($data[$fieldname]);
     }
 
-    public function tousd($data){
-        return '$'.Ks::usd($data['total_purchase']);
+    public function nodigit($data, $fieldname = null){
+        $fieldname = is_null($fieldname)? 'roi':$fieldname;
+        return number_format($data[$fieldname],0);
     }
 
-    public function lpusd($data){
-        return '$'.Ks::usd($data['listingPrice']);
+    public function onedigit($data, $fieldname = null){
+        $fieldname = is_null($fieldname)? 'roi':$fieldname;
+        return number_format($data[$fieldname],1);
     }
 
-    public function fmvusd($data){
-        return '$'.Ks::usd($data['FMV']);
+    public function twodigit($data, $fieldname = null){
+        $fieldname = is_null($fieldname)? 'roi':$fieldname;
+        return number_format($data[$fieldname],2);
+    }
+
+    public function usnumber($data, $fieldname = null){
+        $fieldname = is_null($fieldname)? 'roi':$fieldname;
+        return number_format( (double) $data[$fieldname],0,'.',',');
     }
 
     public function roi($data){

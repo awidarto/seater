@@ -60,23 +60,16 @@
 
     	var sharelist = {};
 
-        var dateinputs = $('.datepicker');
 
-        // work around for Former form lib for Laravel to create proper markup for date picker element
-        dateinputs.each(function(){
-            $(this).parent().addClass('datepicker');
-            $(this).removeClass('datepicker');
-        })
+        //console.log(dateinputs);
 
-        console.log(dateinputs);
-
+        /*
 	    $('.timepicker').timepicker({
 	        minuteStep: 10,
 	        showSeconds: false,
 	        showMeridian: false
 	    });
 
-	    /*
 		//$('.date').datetimepicker({
 		$('.date').datepicker({
 			dateFormat: "dd-mm-yy"
@@ -84,15 +77,40 @@
 		});
 		*/
 
-		$('.datetimepicker').datetimepicker({
-			maskInput: false,
-		});
+        $('.datepicker').daterangepicker({
+            singleDatePicker:true,
+                    startDate: moment(),
+                    endDate: moment().add('days',30),
+                    minDate: '01/01/2012'
+            });
 
-		$('.datepicker').datetimepicker({
-            format: 'dd-MM-yyyy',
-			maskInput: false,
-			pickTime: false
-		});
+        $('.datepicker').on('show',function(ev,picker){
+            console.log($(this).val());
+            var picked = $(this).val();
+            if ( typeof(picked) !== "undefined" && picked !== null && picked !== '' ) {
+                picker.setStartDate(moment(picked,'MM/DD/YYYY'));
+            }
+        });
+
+        $('.eventdate').daterangepicker({
+                maxDate: moment().add('months',12)
+            },function(start, end){
+                if ( typeof(start) !== "undefined" && start !== null && start !== '' ) {
+                    $('#fromDate').val(start.format('MM/DD/YYYY'));
+                    $('#toDate').val(end.format('MM/DD/YYYY'));
+                }
+            });
+
+        $('.eventdate').on('show',function(ev, picker){
+                var start = $('#fromDate').val();
+                if ( typeof(start) !== "undefined" && start !== null && start !== '' && start !== 'invalid date' ) {
+                    picker.setStartDate(moment( $('#fromDate').val(), 'MM/DD/YYYY' ));
+                    picker.setEndDate(moment( $('#toDate').val(), 'MM/DD/YYYY' ));
+                }else{
+                    picker.setStartDate(moment());
+                    picker.setEndDate(moment().add('days',3));
+                }
+        });
 
 		$('.pop').click(function(){
 			var _id = $(this).attr('id');
@@ -412,29 +430,6 @@
 			change: function( event, ui ) {
 				$('#boothid').val('');
 				$('.auto_booth').val('');
-			}
-		});
-
-
-		$('.auto_booth').bind("focus blur change keyup", function(){
-			hallId = $('#hallid').val();
-
-			$('.auto_booth').autocomplete({
-
-				source: base + 'ajax/booth/'+hallId,
-
-				select: function(event, ui){
-					$('#boothid').val(ui.item.id);
-
-				}
-			});
-		});
-
-		$('.auto_exhibitor').autocomplete({
-			source: base + 'ajax/exhibitor',
-			select: function(event, ui){
-				$('#exhibitorid').val(ui.item.id);
-				hallId = $('#exhibitorid').val();
 			}
 		});
 

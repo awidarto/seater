@@ -22,10 +22,11 @@
 
     {{ HTML::style('css/bootstrap-modal.css') }}
 
-    {{ HTML::style('css/bootstrap-datetimepicker.min.css') }}
+    {{ HTML::style('css/sm-datepicker/bootstrap-datetimepicker.min.css') }}
 
     {{ HTML::style('css/flick/jquery-ui-1.9.2.custom.min.css') }}
 
+    {{ HTML::style('css/daterangepicker-bs2.css') }}
 
     {{ HTML::style('css/blueimp-gallery.min.css') }}
 
@@ -167,8 +168,11 @@
 
     {{ HTML::script('js/jquery.tagsinput.js') }}
 
-    {{ HTML::script('js/bootstrap-timepicker.js') }}
-    {{ HTML::script('js/bootstrap-datetimepicker.min.js') }}
+    {{-- HTML::script('js/bootstrap-timepicker.js') --}}
+    {{ HTML::script('js/sm-datepicker/bootstrap-datetimepicker.min.js') }}
+
+    {{ HTML::script('js/moment.min.js') }}
+    {{ HTML::script('js/daterangepicker.js') }}
 
     {{ HTML::script('js/app.js') }}
 

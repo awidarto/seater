@@ -14,13 +14,13 @@
         {{ Former::text('venue','Venue') }}
         {{ Former::text('location','Location') }}
 
-        {{ Former::text('fromDate','From')->class('span7 datepicker')->id('fromDate')
-            ->data_format('dd-mm-yyyy')
-            ->append('<i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>') }}
+        {{ Former::text('fromDate','From')->class('span7 eventdate')
+            ->id('fromDate')
+            ->append('<i class="icon-th"></i>') }}
 
-        {{ Former::text('toDate','Until')->class('span7 datepicker')->id('toDate')
-            ->data_format('dd-mm-yyyy')
-            ->append('<i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>') }}
+        {{ Former::text('toDate','Until')->class('span7 eventdate')
+            ->id('toDate')
+            ->append('<i class="icon-th"></i>') }}
 
 
         {{ Former::select('category')->options(Config::get('ia.eventcat'))->label('Category') }}
@@ -40,8 +40,8 @@
             </div>
         @endfor
         {{ Former::text('expires','Expires')->class('span7 datepicker')
-            ->data_format('dd-mm-yyyy')
-            ->append('<i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>') }}
+            //->data_format('dd-mm-yyyy')
+            ->append('<i class="icon-th"></i>') }}
    </div>
 </div>
 
@@ -69,6 +69,10 @@ $(document).ready(function() {
         getCodePrefix(title);
     });
 
+    $('.eventdate').on('apply',function(ev,picker){
+        console.log(moment( picker.endDate ,'MM/DD/YYYY'));
+        $('#expires').val( picker.endDate.add('weeks',2).format('MM/DD/YYYY') );
+    });
 
     function getCodePrefix(title){
         words = title.split(' ');
