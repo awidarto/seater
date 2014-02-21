@@ -34,14 +34,14 @@ class PropmanagerController extends AdminController {
 
             array('Min Lease Term',array('search'=>true,'sort'=>true)),
             array('Max Lease Term',array('search'=>true,'sort'=>true)),
-            array('Avg Lease Term',array('search'=>false,'sort'=>false)),
-            array('Sum of Lease Term',array('search'=>false,'sort'=>false)),
+            array('Avg Lease Term',array('search'=>true,'sort'=>false)),
+            array('Sum of Lease Term',array('search'=>true,'sort'=>false)),
 
             array('Min Monthly Rental',array('search'=>true,'sort'=>true)),
             array('Max Monthly Rental',array('search'=>true,'sort'=>true)),
-            array('Avg Monthly Rental',array('search'=>false,'sort'=>false)),
-            array('Sum of Monthly Rental',array('search'=>false,'sort'=>false)),
-            array('Total Annual Rental',array('search'=>false,'sort'=>false)),
+            array('Avg Monthly Rental',array('search'=>true,'sort'=>false)),
+            array('Sum of Monthly Rental',array('search'=>true,'sort'=>false)),
+            array('Total Annual Rental',array('search'=>true,'sort'=>false)),
 
 
             array('Created',array('search'=>true,'sort'=>true,'date'=>true)),
@@ -70,11 +70,11 @@ class PropmanagerController extends AdminController {
             array('avg',array('kind'=>'numeric','query'=>'like','callback'=>'onedigit','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
             array('sum',array('kind'=>'numeric','query'=>'like','callback'=>'nodigit','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
 
-            array('monthlyMin',array('kind'=>'numeric','query'=>'like','callback'=>'nodigit','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('monthlyMax',array('kind'=>'numeric','query'=>'like','callback'=>'nodigit','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('monthlyAvg',array('kind'=>'numeric','query'=>'like','callback'=>'onedigit','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('monthlyRental',array('kind'=>'numeric','query'=>'like','callback'=>'onedigit','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('annualRental',array('kind'=>'numeric','query'=>'like','callback'=>'onedigit','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+            array('monthlyMin',array('kind'=>'numeric','query'=>'like','callback'=>'tousd','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+            array('monthlyMax',array('kind'=>'numeric','query'=>'like','callback'=>'tousd','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+            array('monthlyAvg',array('kind'=>'numeric','query'=>'like','callback'=>'tousd','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+            array('monthlyRental',array('kind'=>'numeric','query'=>'like','callback'=>'tousd','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+            array('annualRental',array('kind'=>'numeric','query'=>'like','callback'=>'tousd','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
 
 
             array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
