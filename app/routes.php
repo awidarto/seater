@@ -22,6 +22,7 @@ Route::controller('posts', 'PostsController');
 Route::controller('category', 'CategoryController');
 Route::controller('menu', 'MenuController');
 
+Route::controller('propmanager', 'PropmanagerController');
 Route::controller('promocode', 'PromocodeController');
 Route::controller('transaction', 'TransactionController');
 Route::controller('financial', 'FinancialController');
@@ -82,13 +83,74 @@ Route::get('regenerate',function(){
 
 });
 
+Route::get('propman',function(){
+    $property = new Property();
+
+    $props = $property->distinct('propertyManager')->get();
+
+    $propManArr = array();
+
+    foreach($props as $p){
+        $p = $p->toArray();
+        print $p[0];
+
+        $propMan = $p[0];
+        $propCount =    Property::where('propertyManager','=',$propMan)->count();
+        $propLeaseMax = Property::where('propertyManager','=',$propMan)->max('leaseTerms');
+        $propLeaseMin = Property::where('propertyManager','=',$propMan)->min('leaseTerms');
+        $propLeaseAvg = Property::where('propertyManager','=',$propMan)->avg('leaseTerms');
+        $propLeaseSum = Property::where('propertyManager','=',$propMan)->sum('leaseTerms');
+
+        $propMonthlyMax = Property::where('propertyManager','=',$propMan)->max('monthlyRental');
+        $propMonthlyMin = Property::where('propertyManager','=',$propMan)->min('monthlyRental');
+        $propMonthlyAvg = Property::where('propertyManager','=',$propMan)->avg('monthlyRental');
+        $propMonthlySum = Property::where('propertyManager','=',$propMan)->sum('monthlyRental');
+
+        $propManager = new Propman();
+
+        $propManager->name = $propMan;
+        $propManager->count = $propCount;
+        $propManager->max = $propLeaseMax;
+        $propManager->min = $propLeaseMin;
+        $propManager->avg = $propLeaseAvg;
+        $propManager->sum = $propLeaseSum;
+
+        $propManager->monthlyRental = $propMonthlySum;
+        $propManager->monthlyMax = $propMonthlyMax;
+        $propManager->monthlyMin = $propMonthlyMin;
+        $propManager->monthlyAvg = $propMonthlyAvg;
+
+        $propManager->annualRental = ($propMonthlySum * 12);
+
+        $propManager->createdDate = new MongoDate();
+        $propManager->lastUpdate = new MongoDate();
+
+        $propManager->save();
+
+        $propManArr[] = array(
+                'name'=>$propMan,
+                'count'=>$propCount,
+                'max'=>$propLeaseMax,
+                'min'=>$propLeaseMin,
+                'avg'=>$propLeaseAvg,
+                'monthlyRental'=>$propLeaseSum,
+                'annualRental'=>($propLeaseSum * 12)
+            );
+
+
+    }
+
+    print_r($propManArr);
+
+});
+
 Route::get('tofin',function(){
     $property = new Property();
 
     $props = $property->get();
 
     foreach($props as $p){
-        $p->monthlyRental = $p->monthlyRental;
+        $p->monthlyRental = (double) $p->monthlyRental;
 
         $p->annualRental = 12 * $p->monthlyRental;
 
@@ -106,6 +168,7 @@ Route::get('tofin',function(){
             $p->equity = 0;
         }
         $p->dpsqft = $p->listingPrice / $p->houseSize;
+
         if($p->annualRental > 0){
             $p->ROI = ($p->annualRental - ( $p->tax + $p->propManagement + $p->insurance)) / $p->listingPrice * 100;
             $p->ROIstar = ($p->annualRental - ( $p->tax + $p->propManagement + $p->insurance + $p->vacancyAllowance + $p->maintenanceAllowance )) / $p->listingPrice * 100;
@@ -121,11 +184,23 @@ Route::get('tofin',function(){
 
         $p->tax = new MongoInt32( $p->tax);
         $p->insurance = new MongoInt32($p->insurance);
+        $p->houseSize = new MongoInt32($p->houseSize);
+
+        if( $p->lotSize < 100){
+            $p->lotSize = (double) $p->lotSize * 43560;
+        }else{
+            $p->lotSize = (double) $p->lotSize;
+        }
+
+        $p->leaseTerms = (double) $p->leaseTerms;
+
+        $p->yearBuilt = new MongoInt32($p->yearBuilt);
 
 
         print_r($p->toArray());
 
         $p->save();
+
 
     }
 

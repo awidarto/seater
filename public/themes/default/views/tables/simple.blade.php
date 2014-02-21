@@ -246,7 +246,7 @@
 	}
 
     $(document).ready(function(){
-    	/*
+
     	$.fn.dataTableExt.oApi.fnStandingRedraw = function(oSettings) {
 		    if(oSettings.oFeatures.bServerSide === false){
 		        var before = oSettings._iDisplayStart;
@@ -261,7 +261,34 @@
 		    // draw the 'current' page
 		    oSettings.oApi._fnDraw(oSettings);
 		};
-		*/
+
+		$.fn.dataTableExt.oApi.fnFilterClear  = function ( oSettings )
+		{
+		    /* Remove global filter */
+		    oSettings.oPreviousSearch.sSearch = "";
+
+		    /* Remove the text of the global filter in the input boxes */
+		    if ( typeof oSettings.aanFeatures.f != 'undefined' )
+		    {
+		        var n = oSettings.aanFeatures.f;
+		        for ( var i=0, iLen=n.length ; i<iLen ; i++ )
+		        {
+		            $('input', n[i]).val( '' );
+		        }
+		    }
+
+		    /* Remove the search text for the column filters - NOTE - if you have input boxes for these
+		     * filters, these will need to be reset
+		     */
+		    for ( var i=0, iLen=oSettings.aoPreSearchCols.length ; i<iLen ; i++ )
+		    {
+		        oSettings.aoPreSearchCols[i].sSearch = "";
+		    }
+
+		    /* Redraw */
+		    oSettings.oApi._fnReDraw( oSettings );
+		};
+
 
 		$('.activity-list').tooltip();
 
@@ -381,18 +408,26 @@
 		} );
 
 		$('#clearsearch').click(function(){
+
+			console.log($('thead td input').val());
 			$('thead td input').val('');
+
+			console.log($('thead td input').val());
 
 			console.log('reloading table');
 			//oTable.fnClearTable(1);
-
+			/*
 			$('thead td input').each(function(){
 				console.log(this.id);
 				var index = this.id;
 				oTable.fnFilter('',index);
 			});
+			oTable.fnFilter('',1);
 
 			oTable.fnFilter('');
+			*/
+			oTable.fnFilterClear();
+			oTable.fnDraw();
 		});
 		/*
 		 * Support functions to provide a little bit of 'user friendlyness' to the textboxes in

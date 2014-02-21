@@ -207,6 +207,9 @@ class AdminController extends Controller {
 
 						//$this->model->where($field,$qval);
 					}
+
+                    $q[$field] = $qval;
+
 				}elseif($type == 'numeric' || $type == 'currency'){
 					$str = Input::get('sSearch_'.$idx);
 
@@ -214,7 +217,7 @@ class AdminController extends Controller {
 
 					$strval = trim(str_replace(array('<','>','='), '', $str));
 
-					$qval = new MongoInt32($strval);
+					$qval = (double)$strval;
 
 					/*
 					if(is_null($sign)){
@@ -253,6 +256,11 @@ class AdminController extends Controller {
 					}
 
 					//print $sign;
+                    if(!is_null($sign)){
+                        $qval = array($sign=>$qval);
+                    }
+
+                    $q[$field] = $qval;
 
 				}elseif($type == 'date'|| $type == 'datetime'){
 					$datestring = Input::get('sSearch_'.$idx);
@@ -271,6 +279,9 @@ class AdminController extends Controller {
 					}
 					$qval = array('$gte'=>$daystart,'$lte'=>$dayend);
 					//$qval = Input::get('sSearch_'.$idx);
+
+                    $q[$field] = $qval;
+
 				}elseif($type == '__datetime'){
 					$datestring = Input::get('sSearch_'.$idx);
 
@@ -279,10 +290,10 @@ class AdminController extends Controller {
 					$qval = new MongoDate(strtotime($datestring));
 
 					//$this->model->where($field,$qval);
+                    $q[$field] = $qval;
 
 				}
 
-				$q[$field] = $qval;
 
 			}
 
@@ -437,8 +448,10 @@ class AdminController extends Controller {
 			$counter++;
 		}
 
+        $sEcho = (int) Input::get('sEcho');
+
 		$result = array(
-			'sEcho'=> Input::get('sEcho'),
+			'sEcho'=>  $sEcho,
 			'iTotalRecords'=>$count_all,
 			'iTotalDisplayRecords'=> (is_null($count_display_all))?0:$count_display_all,
 			'aaData'=>$aadata,

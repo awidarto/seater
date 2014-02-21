@@ -37,6 +37,7 @@
               </a>
             <ul class="dropdown-menu">
                 <li><a href="{{ URL::to('financial') }}" {{ sa('financial') }} >Financial Return</a></li>
+                <li><a href="{{ URL::to('propmanager') }}" {{ sa('propmanager') }} >Property Managements</a></li>
                 <li><a href="{{ URL::to('activity') }}" {{ sa('activity') }} >Activity Log</a></li>
                 <li><a href="{{ URL::to('access') }}" {{ sa('access') }} >Site Access</a></li>
             </ul>

@@ -1,6 +1,6 @@
 <?php
 
-class FinancialController extends AdminController {
+class PropmanagerController extends AdminController {
 
     public function __construct()
     {
@@ -12,7 +12,7 @@ class FinancialController extends AdminController {
         $this->crumb->append('Home','left',true);
         $this->crumb->append(strtolower($this->controller_name));
 
-        $this->model = new Property();
+        $this->model = new Propman();
         //$this->model = DB::collection('documents');
 
     }
@@ -29,31 +29,20 @@ class FinancialController extends AdminController {
     {
 
         $this->heads = array(
-            array('Property ID',array('search'=>true,'sort'=>true)),
-            array('Property Address',array('search'=>true,'sort'=>true)),
-            array('Listing Price',array('search'=>true,'sort'=>true)),
-            array('FMV',array('search'=>true,'sort'=>true)),
-            array('Equity',array('search'=>false,'sort'=>false)),
+            array('Name',array('search'=>true,'sort'=>true)),
+            array('Property Count',array('search'=>true,'sort'=>true)),
 
-            array('Bed',array('search'=>true,'sort'=>false)),
-            array('Bath',array('search'=>true,'sort'=>true)),
-            //array('Pool',array('search'=>true,'sort'=>true)),
-            //array('Garage',array('search'=>true,'sort'=>true)),
-            //array('Basement',array('search'=>true,'sort'=>true)),
+            array('Min Lease Term',array('search'=>true,'sort'=>true)),
+            array('Max Lease Term',array('search'=>true,'sort'=>true)),
+            array('Avg Lease Term',array('search'=>false,'sort'=>false)),
+            array('Sum of Lease Term',array('search'=>false,'sort'=>false)),
 
-            array('Year Built',array('search'=>true,'sort'=>true)),
-            array('Sqft',array('search'=>true,'sort'=>true)),
-            array('Lot Size',array('search'=>true,'sort'=>true)),
-            array('$/Sqft',array('search'=>true,'sort'=>true)),
-            array('Section 8',array('search'=>true,'sort'=>true)),
-            array('Monthly Rent',array('search'=>true,'sort'=>true)),
-            array('Tax',array('search'=>true,'sort'=>true)),
-            array('Insurance',array('search'=>true,'sort'=>true)),
-            array('Prop Mgmt',array('search'=>true,'sort'=>true)),
-            array('Rental Yield',array('search'=>true,'sort'=>true)),
-            array('ROI',array('search'=>true,'sort'=>true)),
-            array('ROI*',array('search'=>true,'sort'=>true)),
-            array('OPR',array('search'=>true,'sort'=>true)),
+            array('Min Monthly Rental',array('search'=>true,'sort'=>true)),
+            array('Max Monthly Rental',array('search'=>true,'sort'=>true)),
+            array('Avg Monthly Rental',array('search'=>false,'sort'=>false)),
+            array('Sum of Monthly Rental',array('search'=>false,'sort'=>false)),
+            array('Total Annual Rental',array('search'=>false,'sort'=>false)),
+
 
             array('Created',array('search'=>true,'sort'=>true,'date'=>true)),
             array('Last Update',array('search'=>true,'sort'=>true,'date'=>true)),
@@ -61,7 +50,7 @@ class FinancialController extends AdminController {
 
         //print $this->model->where('docFormat','picture')->get()->toJSON();
 
-        $this->title = 'Financial Return';
+        $this->title = 'Property Managements';
 
         $this->can_add = false;
 
@@ -73,34 +62,19 @@ class FinancialController extends AdminController {
     {
 
         $this->fields = array(
-            array('propertyId',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('address',array('kind'=>'text','callback'=>'propAddress','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('listingPrice',array('kind'=>'numeric' ,'callback'=>'tousd','query'=>'like','pos'=>'both','show'=>true)),
-            array('FMV',array('kind'=>'numeric','callback'=>'tousd','query'=>'like','pos'=>'both','show'=>true)),
-            array('equity',array('kind'=>'numeric','callback'=>'onedigit' ,'query'=>'like','pos'=>'both','show'=>true)),
+            array('name',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+            array('count',array('kind'=>'numeric','query'=>'like','callback'=>'nodigit','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
 
+            array('min',array('kind'=>'numeric','query'=>'like','callback'=>'nodigit','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+            array('max',array('kind'=>'numeric','query'=>'like','callback'=>'nodigit','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+            array('avg',array('kind'=>'numeric','query'=>'like','callback'=>'onedigit','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+            array('sum',array('kind'=>'numeric','query'=>'like','callback'=>'nodigit','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
 
-            array('bed',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
-            array('bath',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
-            //array('pool',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            //array('garage',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            //array('basement',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-
-            array('yearBuilt',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
-            array('houseSize',array('kind'=>'numeric','callback'=>'usnumber','query'=>'like','pos'=>'both','show'=>true)),
-            array('lotSize',array('kind'=>'numeric','callback'=>'usnumber','query'=>'like','pos'=>'both','show'=>true)),
-            array('dpsqft',array('kind'=>'numeric','callback'=>'usnumber','query'=>'like','pos'=>'both','show'=>true)),
-            array('section8',array('kind'=>'text','callback'=>'usnumber','query'=>'like','pos'=>'both','show'=>true)),
-            array('monthlyRental',array('kind'=>'numeric','callback'=>'usnumber','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('tax',array('kind'=>'numeric','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('insurance',array('kind'=>'numeric','callback'=>'usnumber', 'query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-
-            array('propManagement',array('kind'=>'numeric','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('RentalYield',array('kind'=>'numeric','callback'=>'rentalyield','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-
-            array('ROI',array('kind'=>'numeric','query'=>'like','callback'=>'onedigit','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('ROIstar',array('kind'=>'numeric','query'=>'like','callback'=>'onedigit','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('OPR',array('kind'=>'numeric','query'=>'like','callback'=>'twodigit','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+            array('monthlyMin',array('kind'=>'numeric','query'=>'like','callback'=>'nodigit','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+            array('monthlyMax',array('kind'=>'numeric','query'=>'like','callback'=>'nodigit','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+            array('monthlyAvg',array('kind'=>'numeric','query'=>'like','callback'=>'onedigit','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+            array('monthlyRental',array('kind'=>'numeric','query'=>'like','callback'=>'onedigit','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+            array('annualRental',array('kind'=>'numeric','query'=>'like','callback'=>'onedigit','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
 
 
             array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
