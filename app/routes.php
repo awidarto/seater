@@ -92,7 +92,7 @@ Route::get('propman',function(){
 
     foreach($props as $p){
         $p = $p->toArray();
-        print $p[0];
+        //print $p[0];
 
         $propMan = $p[0];
         $propCount =    Property::where('propertyManager','=',$propMan)->count();
@@ -106,7 +106,14 @@ Route::get('propman',function(){
         $propMonthlyAvg = Property::where('propertyManager','=',$propMan)->avg('monthlyRental');
         $propMonthlySum = Property::where('propertyManager','=',$propMan)->sum('monthlyRental');
 
-        $propManager = new Propman();
+        $pobj = Propman::where('name','=',$propMan)->first();
+
+        if($pobj){
+            $propManager = $pobj;
+        }else{
+            $propManager = new Propman();
+            $propManager->createdDate = new MongoDate();
+        }
 
         $propManager->name = $propMan;
         $propManager->count = $propCount;
@@ -122,25 +129,13 @@ Route::get('propman',function(){
 
         $propManager->annualRental = ($propMonthlySum * 12);
 
-        $propManager->createdDate = new MongoDate();
         $propManager->lastUpdate = new MongoDate();
 
         $propManager->save();
 
-        $propManArr[] = array(
-                'name'=>$propMan,
-                'count'=>$propCount,
-                'max'=>$propLeaseMax,
-                'min'=>$propLeaseMin,
-                'avg'=>$propLeaseAvg,
-                'monthlyRental'=>$propLeaseSum,
-                'annualRental'=>($propLeaseSum * 12)
-            );
-
-
     }
 
-    print_r($propManArr);
+    //print_r($propManArr);
 
 });
 
