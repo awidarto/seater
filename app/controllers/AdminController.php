@@ -1073,7 +1073,10 @@ class AdminController extends Controller {
     {
         $dlfile = public_path().'/storage/dled/'.$filename;
 
-        return Response::download($dlfile );
+        $headers = array(
+                'Content-Type: application/vnd.ms-excel'
+            );
+        return Response::download($dlfile, $filename, $headers );
     }
 
     public function getImport()
