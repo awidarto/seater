@@ -455,7 +455,7 @@
 			$.post('{{ URL::to($ajaxdlxl) }}',{'filter' : dlfilter, 'sort':sort[0], 'sortdir' : sort[1] }, function(data) {
 				if(data.status == 'OK'){
 
-					window.location.href = data.url;
+					//window.location.href = data.url;
 
 				}
 			},'json');
