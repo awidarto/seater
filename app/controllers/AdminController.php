@@ -1057,12 +1057,12 @@ class AdminController extends Controller {
         Excel::create( $fname )
             ->sheet('sheet1')
             ->with($sdata)
-            ->save('xls',public_path().'/storage/dled');
+            ->save('csv',public_path().'/storage/dled');
 
         $result = array(
             'status'=>'OK',
             'filename'=>$fname,
-            'url'=>URL::to(strtolower($this->controller_name).'/dl/'.$fname.'.xls'),
+            'url'=>URL::to(strtolower($this->controller_name).'/dl/'.$fname.'.csv'),
         );
 
         print json_encode($result);
