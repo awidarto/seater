@@ -71,6 +71,6 @@ return array(
     |
     */
 
-    'path' => base_path(),
+    'path' => public_path(),
 
 );
