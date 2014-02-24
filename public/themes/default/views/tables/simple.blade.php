@@ -27,13 +27,17 @@
 </style>
 
 <div class="row-fluid">
-	<div class="span12 command-bar">
+	<div class="span6 command-bar">
 
         <h3>{{ $title }}</h3>
 
         @if(isset($can_add) && $can_add == true)
 	       	<a href="{{ URL::to($addurl) }}" class="btn btn-primary">Add</a>
+	       	<a href="{{ URL::to($importurl) }}" class="btn btn-primary">Import Excel</a>
        	@endif
+	 </div>
+	 <div class="span6">
+	       	<span class="btn pull-right" id="download-xls">Download Excel</span>
 	 </div>
 </div>
 
@@ -361,6 +365,8 @@
 			oTable.fnFilter( this.value, search_index );
 		} );
 
+
+
 		eldatetime = $('.datetimepickersearch').datetimepicker({
 			minView:2,
 			maxView:2
@@ -429,6 +435,34 @@
 			oTable.fnFilterClear();
 			oTable.fnDraw();
 		});
+
+		$('#download-xls').on('click',function(){
+			var flt = $('thead td input, thead td select');
+			var dlfilter = [];
+
+			flt.each(function(){
+				if($(this).hasClass('datetimeinput') || $(this).hasClass('dateinput')){
+					console.log(this.parentNode);
+					dlfilter[parseInt(this.parentNode.id)] = this.value ;
+				}else{
+					dlfilter[parseInt(this.id)] = this.value ;
+				}
+			});
+			console.log(dlfilter);
+
+			var sort = oTable.fnSettings().aaSorting;
+			console.log(sort);
+			$.post('{{ URL::to($ajaxdlxl) }}',{'filter' : dlfilter, 'sort':sort[0], 'sortdir' : sort[1] }, function(data) {
+				if(data.status == 'OK'){
+
+					window.location.href = data.url;
+
+				}
+			},'json');
+
+
+		});
+
 		/*
 		 * Support functions to provide a little bit of 'user friendlyness' to the textboxes in
 		 * the footer

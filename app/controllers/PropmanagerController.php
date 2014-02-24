@@ -119,6 +119,53 @@ class PropmanagerController extends AdminController {
         return parent::postEdit($id,$data);
     }
 
+
+    public function postDlxl(){
+
+        $this->heads = array(
+            array('Name',array('search'=>true,'sort'=>true)),
+            array('Property Count',array('search'=>true,'sort'=>true)),
+
+            array('Min Lease Term',array('search'=>true,'sort'=>true)),
+            array('Max Lease Term',array('search'=>true,'sort'=>true)),
+            array('Avg Lease Term',array('search'=>true,'sort'=>false)),
+            array('Sum of Lease Term',array('search'=>true,'sort'=>false)),
+
+            array('Min Monthly Rental',array('search'=>true,'sort'=>true)),
+            array('Max Monthly Rental',array('search'=>true,'sort'=>true)),
+            array('Avg Monthly Rental',array('search'=>true,'sort'=>false)),
+            array('Sum of Monthly Rental',array('search'=>true,'sort'=>false)),
+            array('Total Annual Rental',array('search'=>true,'sort'=>false)),
+
+            array('Created',array('search'=>true,'sort'=>true,'date'=>true)),
+            array('Last Update',array('search'=>true,'sort'=>true,'date'=>true)),
+        );
+
+
+        $this->fields = array(
+            array('name',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('count',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
+
+            array('min',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
+            array('max',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
+            array('avg',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
+            array('sum',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
+
+            array('monthlyMin',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
+            array('monthlyMax',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
+            array('monthlyAvg',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
+            array('monthlyRental',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
+            array('annualRental',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
+
+
+            array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
+            array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
+        );
+
+        return parent::postDlxl();
+
+    }
+
     public function fulladdress($data){
         if(isset($data['address_2'])){
             return $data['address'].' '.$data['address_2'];

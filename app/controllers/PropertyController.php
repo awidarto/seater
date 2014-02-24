@@ -305,7 +305,7 @@ class PropertyController extends AdminController {
             'number' =>'required',
             'propertyManager' =>'required',
             'propertyStatus' =>'required',
-            'publishStatus' =>'required',
+            //'publishStatus' =>'required',
             'section8' =>'required',
             'state' =>'required',
             'tax' =>'required',
@@ -339,7 +339,7 @@ class PropertyController extends AdminController {
             'number' =>'required',
             'propertyManager' =>'required',
             'propertyStatus' =>'required',
-            'publishStatus' =>'required',
+            //'publishStatus' =>'required',
             'section8' =>'required',
             'state' =>'required',
             'tax' =>'required',
@@ -350,6 +350,135 @@ class PropertyController extends AdminController {
 
         return parent::postEdit($id,$data);
     }
+
+
+    public function postDlxl()
+    {
+
+        $this->heads = null;
+
+        $this->fields = array(
+                array('propertyId',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('sourceID',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('number',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('address',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('city',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('zipCode',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('state',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('bed',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('bath',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('pool',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('garage',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('basement',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('category',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('tags',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('propertyStatus',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('houseSize',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('lotSize',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('listingPrice',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('FMV',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('monthlyRental',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('leaseStartDate',array('kind'=>'date','query'=>'like','pos'=>'both','show'=>true)),
+                array('leaseTerms',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('annualRental',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('dpsqft',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('equity',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('HOA',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('OPR',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('ROI',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('ROIstar',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('RentalYield',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('insurance',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('description',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('maintenanceAllowance',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('parcelNumber',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('propManagement',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('propertyManager',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('publishDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
+                array('publishStatus',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('reservedAt',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
+                array('reservedBy',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('section8',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('sequence',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('specialConditionRemarks',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('tax',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('type',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('typeOfConstruction',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('vacancyAllowance',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('yearBuilt',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
+                array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true))
+        );
+
+        return parent::postDlxl();
+    }
+
+    public function getImport(){
+
+        $this->importkey = 'propertyId';
+
+        return parent::getImport();
+    }
+
+    public function postUploadimport()
+    {
+        $this->importkey = 'propertyId';
+
+        return parent::postUploadimport();
+    }
+
+    public function beforeImportCommit($data)
+    {
+        $defaults = array();
+
+        $files = array();
+
+        // set new sequential ID
+        $sequence = new Sequence();
+
+        $seq = $sequence->getNewId('property');
+
+        $data['sequence'] = $seq;
+
+        $data['propertyId'] = Config::get('ia.property_id_prefix').$seq;
+
+        if($data['propertyStatus'] == 'available'){
+            $data['publishDate'] = $data['lastUpdate'];
+        }
+
+        if($data['propertyStatus'] == 'sold'){
+            $data['soldDate'] = $data['lastUpdate'];
+        }
+
+        $data['listingPrice'] = new MongoInt32($data['listingPrice']);
+
+        $data['thumbnail_url'] = array();
+        $data['large_url'] = array();
+        $data['medium_url'] = array();
+        $data['full_url'] = array();
+        $data['delete_type'] = array();
+        $data['delete_url'] = array();
+        $data['filename'] = array();
+        $data['filesize'] = array();
+        $data['temp_dir'] = array();
+        $data['filetype'] = array();
+        $data['fileurl'] = array();
+        $data['file_id'] = array();
+        $data['caption'] = array();
+
+        $data['defaultpic'] = '';
+        $data['brchead'] = '';
+        $data['brc1'] = '';
+        $data['brc2'] = '';
+        $data['brc3'] = '';
+
+
+        $data['defaultpictures'] = array();
+        $data['files'] = array();
+
+        return $data;
+    }
+
 
     public function makeActions($data)
     {
@@ -397,7 +526,7 @@ class PropertyController extends AdminController {
 
         $thumbnail_url = '';
 
-        if(isset($data['files']) && count($data['files'])){
+        if(isset($data['files']) && count($data['files']) && isset($data['defaultpic']) && $data['defaultpic'] != '' ){
             $glinks = '';
 
             $gdata = $data['files'][$data['defaultpic']];

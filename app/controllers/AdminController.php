@@ -36,9 +36,15 @@ class AdminController extends Controller {
 
     public $addurl = null;
 
+    public $importurl = null;
+
+    public $importkey = null;
+
     public $rowdetail = null;
 
     public $delurl = null;
+
+    public $dlxl = null;
 
     public $newbutton = null;
 
@@ -99,6 +105,8 @@ class AdminController extends Controller {
 
         $this->addurl = (is_null($this->addurl))? strtolower($this->controller_name).'/add': $this->addurl;
 
+        $this->importurl = (is_null($this->importurl))? strtolower($this->controller_name).'/import': $this->importurl;
+
         $this->rowdetail = (is_null($this->rowdetail))? strtolower($this->controller_name).'.rowdetail': $this->rowdetail;
 
         $this->delurl = (is_null($this->delurl))? strtolower($this->controller_name).'/del': $this->delurl;
@@ -127,13 +135,20 @@ class AdminController extends Controller {
 
 		$disablesort = implode(',',$disablesort);
 
+        /* additional features */
+
+        $this->dlxl = (is_null($this->dlxl))? strtolower($this->controller_name).'/dlxl': $this->dlxl;
+
+
 		return View::make('tables.simple')
 			->with('title',$this->title )
 			->with('newbutton', $this->newbutton )
 			->with('disablesort',$disablesort )
 			->with('addurl',$this->addurl )
+            ->with('importurl',$this->importurl )
 			->with('ajaxsource',URL::to($this->ajaxsource) )
 			->with('ajaxdel',URL::to($this->delurl) )
+            ->with('ajaxdlxl',URL::to($this->dlxl) )
 			->with('crumb',$this->crumb )
             ->with('can_add', $this->can_add )
 			->with('heads',$heads )
@@ -723,6 +738,456 @@ class AdminController extends Controller {
 		return View::make('view')
 			->with('obj',$obj);
 	}
+
+    public function postDlxl()
+    {
+
+        $fields = $this->fields;
+
+        if(is_null($this->heads)){
+            $titles = array();
+            foreach ($this->fields as $fh) {
+                $titles[] = array(ucwords($fh[0]),array('search'=>true,'sort'=>true));
+            }
+        }else{
+            $titles = $this->heads;
+        }
+
+        //print_r($titles);
+
+        array_unshift($fields, array('seq',array('kind'=>false)));
+        array_unshift($fields, array('action',array('kind'=>false)));
+
+        array_unshift($titles, array('seq',array('kind'=>false)));
+        array_unshift($titles, array('action',array('kind'=>false)));
+
+        $infilters = Input::get('filter');
+        $insorting = Input::get('sort');
+
+
+        $defsort = 1;
+        $defdir = -1;
+
+        $idx = 0;
+        $q = array();
+
+        $hilite = array();
+        $hilite_replace = array();
+
+        $colheads = array();
+
+        //exit();
+
+        for($i = 0;$i < count($fields);$i++){
+            $idx = $i;
+
+            //print_r($fields[$i]);
+
+            $field = $fields[$i][0];
+            $title = $titles[$i][0];
+            $type = $fields[$i][1]['kind'];
+
+            $colheads[$i] = $field;
+            $coltitles[$i] = $title;
+
+            $qval = '';
+
+            //print 'filter : '. $field.' : '.$infilters[$i];
+
+            if( isset($infilters[$i]) && $infilters[$i])
+            {
+                if( $type == 'text'){
+                    if($fields[$i][1]['query'] == 'like'){
+                        $pos = $fields[$i][1]['pos'];
+                        if($pos == 'both'){
+                            //$model->whereRegex($field,'/'.Input::get('sSearch_'.$idx).'/i');
+                            //$this->model->where($field,'like','%'.Input::get('sSearch_'.$idx).'%');
+
+                            $qval = new MongoRegex('/'.$infilters[$i].'/i');
+                        }else if($pos == 'before'){
+                            //$this->model->whereRegex($field,'/^'.$infilters[$i].'/i');
+                            //$this->model->where($field,'like','%'.$infilters[$i]);
+
+                            $qval = new MongoRegex('/^'.$infilters[$i].'/i');
+                        }else if($pos == 'after'){
+                            //$this->model->whereRegex($field,'/'.$infilters[$i].'$/i');
+                            //$this->model->where($field,'like', $infilters[$i].'%');
+
+                            $qval = new MongoRegex('/'.$infilters[$i].'$/i');
+                        }
+                    }else{
+                        $qval = $infilters[$i];
+
+                        //$this->model->where($field,$qval);
+                    }
+
+                    $q[$field] = $qval;
+
+                }elseif($type == 'numeric' || $type == 'currency'){
+                    $str = $infilters[$i];
+
+                    $sign = null;
+
+                    $strval = trim(str_replace(array('<','>','='), '', $str));
+
+                    $qval = (double)$strval;
+
+                    /*
+                    if(is_null($sign)){
+                        $qval = new MongoInt32($strval);
+                    }else{
+                        $str = new MongoInt32($str);
+                        $qval = array($sign=>$str);
+                    }
+                    */
+
+
+                    if(strpos($str, "<=") !== false){
+                        $sign = '$lte';
+
+                        //$this->model->whereLte($field,$qval);
+                        //$this->model->where($field,'<=',$qval);
+
+                    }elseif(strpos($str, ">=") !== false){
+                        $sign = '$gte';
+
+                        //$this->model->whereGte($field,$qval);
+                        //$this->model->where($field,'>=',$qval);
+
+                    }elseif(strpos($str, ">") !== false){
+                        $sign = '$gt';
+
+                        //$this->model->whereGt($field,$qval);
+                        //$this->model->where($field,'>',$qval);
+
+                    }elseif(stripos($str, "<") !== false){
+                        $sign = '$lt';
+
+                        //$this->model->whereLt($field,$qval);
+                        //$this->model->where($field,'<',$qval);
+
+                    }
+
+                    //print $sign;
+                    if(!is_null($sign)){
+                        $qval = array($sign=>$qval);
+                    }
+
+                    $q[$field] = $qval;
+
+                }elseif($type == 'date'|| $type == 'datetime'){
+                    $datestring = $infilters[$i];
+                    $datestring = date('d-m-Y', $datestring / 1000);
+
+                    if (($timestamp = $datestring) === false) {
+                    } else {
+                        $daystart = new MongoDate(strtotime($datestring.' 00:00:00'));
+                        $dayend = new MongoDate(strtotime($datestring.' 23:59:59'));
+
+                        $qval = array($field =>array('$gte'=>$daystart,'$lte'=>$dayend));
+                        //echo "$str == " . date('l dS \o\f F Y h:i:s A', $timestamp);
+
+                        //$this->model->whereBetween($field,$daystart,$dayend);
+
+                    }
+                    $qval = array('$gte'=>$daystart,'$lte'=>$dayend);
+                    //$qval = $infilters[$i];
+
+                    $q[$field] = $qval;
+
+                }elseif($type == '__datetime'){
+                    $datestring = $infilters[$i];
+
+                    print $datestring;
+
+                    $qval = new MongoDate(strtotime($datestring));
+
+                    //$this->model->where($field,$qval);
+                    $q[$field] = $qval;
+
+                }
+
+
+            }
+
+        }
+
+        //print_r($q);
+
+        /*
+        if(count($q) > 0){
+            $results = $model->skip( $pagestart )->take( $pagelength )->orderBy($sort_col, $sort_dir )->get();
+            $count_display_all = $model->count();
+        }else{
+            $results = $model->find(array(),array(),array($sort_col=>$sort_dir),$limit);
+            $count_display_all = $model->count();
+        }
+        */
+
+        //$model->where('docFormat','picture');
+
+        array_unshift($fields, array('sel',array('kind'=>false)));
+
+        if($insorting[0] == 0){
+            $sort_col = 'lastUpdate';
+
+            $sort_dir = 'desc';
+        }else{
+            $sort_col = $fields[$insorting[0]][0];
+
+            $sort_dir = $insorting[1];
+
+        }
+
+        //print $sort_col.' -> '.$sort_dir;
+
+
+
+        if(is_array($q) && count($q) > 0){
+            $results = $this->model->whereRaw($q)->orderBy($sort_col, $sort_dir )->get();
+
+            $count_display_all = $this->model->whereRaw($q)->count();
+
+        }else{
+            $results = $this->model->orderBy($sort_col, $sort_dir )->get();
+
+            $count_display_all = $this->model->count();
+
+        }
+
+        //print_r($results->toArray());
+
+        $aadata = array();
+
+        $counter = 1;
+
+        foreach ($results as $doc) {
+
+            $row = array();
+
+            //$row[] = $counter;
+
+            foreach($fields as $field){
+                if($field[1]['kind'] != false && $field[1]['show'] == true){
+
+                    $fieldarray = explode('.',$field[0]);
+                    if(is_array($fieldarray) && count($fieldarray) > 1){
+                        $fieldarray = implode('\'][\'',$fieldarray);
+                        $cstring = '$label = (isset($doc[\''.$fieldarray.'\']))?true:false;';
+                        eval($cstring);
+                    }else{
+                        $label = (isset($doc[$field[0]]))?true:false;
+                    }
+
+
+                    if($label){
+
+                        if( isset($field[1]['callback']) && $field[1]['callback'] != ''){
+                            $callback = $field[1]['callback'];
+                            $row[] = $this->$callback($doc, $field[0]);
+                        }else{
+                            if($field[1]['kind'] == 'datetime'){
+                                if($doc[$field[0]] instanceof MongoDate){
+                                    $rowitem = date('d-m-Y H:i:s',$doc[$field[0]]->sec);
+                                }elseif ($doc[$field[0]] instanceof Date) {
+                                    $rowitem = date('d-m-Y H:i:s',$doc[$field[0]]);
+                                }else{
+                                    //$rowitem = $doc[$field[0]];
+                                    if(is_array($doc[$field[0]])){
+                                        $rowitem = date('d-m-Y H:i:s', time() );
+                                    }else{
+                                        $rowitem = date('d-m-Y H:i:s',strtotime($doc[$field[0]]) );
+                                    }
+                                }
+                            }elseif($field[1]['kind'] == 'date'){
+                                if($doc[$field[0]] instanceof MongoDate){
+                                    $rowitem = date('d-m-Y',$doc[$field[0]]->sec);
+                                }elseif ($doc[$field[0]] instanceof Date) {
+                                    $rowitem = date('d-m-Y',$doc[$field[0]]);
+                                }else{
+                                    //$rowitem = $doc[$field[0]];
+                                    $rowitem = date('d-m-Y',strtotime($doc[$field[0]]) );
+                                }
+                            }elseif($field[1]['kind'] == 'currency'){
+                                $num = (double) $doc[$field[0]];
+                                $rowitem = number_format($num,2,',','.');
+                            }else{
+                                $rowitem = $doc[$field[0]];
+                            }
+
+                            if(isset($field[1]['attr'])){
+                                $attr = '';
+                                foreach ($field[1]['attr'] as $key => $value) {
+                                    $attr .= $key.'="'.$value.'" ';
+                                }
+                                $row[] = '<span '.$attr.' >'.$rowitem.'</span>';
+                            }else{
+                                $row[] = $rowitem;
+                            }
+
+                        }
+
+
+                    }else{
+                        $row[] = '';
+                    }
+                }
+            }
+
+            $aadata[] = $row;
+
+            $counter++;
+        }
+
+        $sdata = $aadata;
+
+        array_shift($colheads);
+        array_shift($colheads);
+        array_shift($coltitles);
+        array_shift($coltitles);
+
+        array_unshift($sdata,$colheads);
+        array_unshift($sdata,$coltitles);
+
+        //print_r($sdata);
+        //print public_path();
+
+        $fname =  $this->controller_name.'_'.date('d-m-Y-H-m-s',time());
+
+        $result = array(
+            'status'=>'OK',
+            'filename'=>$fname,
+            'url'=>URL::to(strtolower($this->controller_name).'/dl/'.$fname.'.xls'),
+        );
+
+        print json_encode($result);
+
+        Excel::create( $fname )
+            ->sheet('sheet1')
+            ->with($sdata)
+            ->save('xls',public_path().'/storage/dled');
+
+    }
+
+    public function getDl($filename)
+    {
+        $dlfile = public_path().'/storage/dled/'.$filename;
+
+        return Response::download($dlfile );
+    }
+
+    public function getImport()
+    {
+        return View::make('shared.importinput')
+            ->with('title',$this->title)
+            //->with('input_name',$this->input_name)
+            ->with('importkey', $this->importkey)
+            ->with('back',strtolower($this->controller_name))
+            ->with('submit',strtolower($this->controller_name).'/uploadimport');
+    }
+
+    public function postUploadimport()
+    {
+        $file = Input::file('inputfile');
+
+        $headindex = Input::get('headindex');
+
+        $firstdata = Input::get('firstdata');
+
+        $importkey = (!is_null($this->importkey))?Input::get('importkey'):$this->importkey;
+
+        $rstring = str_random(15);
+
+        $destinationPath = realpath('storage/upload').'/'.$rstring;
+
+        $filename = $file->getClientOriginalName();
+        $filemime = $file->getMimeType();
+        $filesize = $file->getSize();
+        $extension =$file->getClientOriginalExtension(); //if you need extension of the file
+
+        $filename = str_replace(Config::get('kickstart.invalidchars'), '-', $filename);
+
+        $uploadSuccess = $file->move($destinationPath, $filename);
+
+        $fileitems = array();
+
+        if($uploadSuccess){
+
+            $xlsfile = realpath('storage/upload').'/'.$rstring.'/'.$filename;
+
+            $imp = Excel::load($xlsfile)->toArray();
+
+            $headrow = $imp[$headindex - 1];
+
+            $firstdata = $firstdata - 1;
+
+            $imported = array();
+
+            //print_r($headrow);
+
+            for($i = $firstdata; $i < count($imp);$i++){
+
+                $row = $imp[$i];
+
+                $rowitem = array();
+
+                for($j = 0 ; $j < count($headrow); $j++){
+                    if(isset($headrow[$j])){
+                        $rowitem[$headrow[$j]] = $row[$j];
+                    }
+                }
+
+                $imported[] = $rowitem;
+
+                if($importkey != '' && !is_null($importkey)){
+                    $obj = $this->model->where($importkey, '=', $rowitem[$importkey])->first();
+
+                    if($obj){
+
+                        foreach($rowitem as $k=>$v){
+                            if($v != ''){
+                                $obj->{$k} = $v;
+                            }
+                        }
+
+                        $obj->save();
+                    }else{
+
+                        $rowitem['createdDate'] = new MongoDate();
+                        $rowitem['lastUpdate'] = new MongoDate();
+
+                        $rowitem = $this->beforeImportCommit($rowitem);
+
+                        $this->model->insert($rowitem);
+                    }
+
+
+                }else{
+
+                    $rowitem['createdDate'] = new MongoDate();
+                    $rowitem['lastUpdate'] = new MongoDate();
+
+                    $rowitem = $this->beforeImportCommit($rowitem);
+
+                    $this->model->insert($rowitem);
+
+                }
+
+            }
+
+
+        }
+
+        return Redirect::to($this->backlink);
+
+    }
+
+    public function beforeImportCommit($rowitem)
+    {
+        return $rowitem;
+    }
+
+
 
 	public function get_action_sample(){
 		\Laravel\CLI\Command::run(array('notify'));
