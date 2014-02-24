@@ -1054,6 +1054,11 @@ class AdminController extends Controller {
 
         $fname =  $this->controller_name.'_'.date('d-m-Y-H-m-s',time());
 
+        Excel::create( $fname )
+            ->sheet('sheet1')
+            ->with($sdata)
+            ->save('xls',public_path().'/storage/dled');
+
         $result = array(
             'status'=>'OK',
             'filename'=>$fname,
@@ -1061,11 +1066,6 @@ class AdminController extends Controller {
         );
 
         print json_encode($result);
-
-        Excel::create( $fname )
-            ->sheet('sheet1')
-            ->with($sdata)
-            ->save('xls',public_path().'/storage/dled');
 
     }
 
