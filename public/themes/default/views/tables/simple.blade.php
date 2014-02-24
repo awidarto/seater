@@ -35,9 +35,10 @@
 	       	<a href="{{ URL::to($addurl) }}" class="btn btn-primary">Add</a>
 	       	<a href="{{ URL::to($importurl) }}" class="btn btn-primary">Import Excel</a>
        	@endif
+	       	<a class="btn" id="download-xls">Download Excel</a>
+	       	<a class="btn" id="download-csv">Download CSV</a>
 	 </div>
 	 <div class="span6">
-	       	<span class="btn pull-right" id="download-xls">Download Excel</span>
 	 </div>
 </div>
 
@@ -455,12 +456,39 @@
 			$.post('{{ URL::to($ajaxdlxl) }}',{'filter' : dlfilter, 'sort':sort[0], 'sortdir' : sort[1] }, function(data) {
 				if(data.status == 'OK'){
 
-					//window.location.href = data.url;
+					window.location.href = data.urlxls;
 
 				}
 			},'json');
 
+			return false;
+		});
 
+		$('#download-csv').on('click',function(){
+			var flt = $('thead td input, thead td select');
+			var dlfilter = [];
+
+			flt.each(function(){
+				if($(this).hasClass('datetimeinput') || $(this).hasClass('dateinput')){
+					console.log(this.parentNode);
+					dlfilter[parseInt(this.parentNode.id)] = this.value ;
+				}else{
+					dlfilter[parseInt(this.id)] = this.value ;
+				}
+			});
+			console.log(dlfilter);
+
+			var sort = oTable.fnSettings().aaSorting;
+			console.log(sort);
+			$.post('{{ URL::to($ajaxdlxl) }}',{'filter' : dlfilter, 'sort':sort[0], 'sortdir' : sort[1] }, function(data) {
+				if(data.status == 'OK'){
+
+					window.location.href = data.urlcsv;
+
+				}
+			},'json');
+
+			return false;
 		});
 
 		/*

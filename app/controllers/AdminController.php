@@ -1054,15 +1054,32 @@ class AdminController extends Controller {
 
         $fname =  $this->controller_name.'_'.date('d-m-Y-H-m-s',time());
 
+        /*
         Excel::create( $fname )
             ->sheet('sheet1')
             ->with($sdata)
-            ->save('csv',public_path().'/storage/dled');
+            ->save('xls',public_path().'/storage/dled');
+        */
+
+        Excel::create( $fname )
+            ->sheet('sheet1')
+            ->with($sdata)
+            ->save('xls',public_path().'/storage/dled');
+
+        $fp = fopen(public_path().'/storage/dled/'.$fname.'.csv', 'w');
+
+        foreach ($sdata as $fields) {
+            fputcsv($fp, $fields, ',' , '"');
+        }
+
+        fclose($fp);
+
 
         $result = array(
             'status'=>'OK',
             'filename'=>$fname,
-            'url'=>URL::to(strtolower($this->controller_name).'/dl/'.$fname.'.csv'),
+            'urlxls'=>URL::to(strtolower($this->controller_name).'/dl/'.$fname.'.xls'),
+            'urlcsv'=>URL::to(strtolower($this->controller_name).'/csv/'.$fname.'.csv')
         );
 
         print json_encode($result);
@@ -1075,6 +1092,16 @@ class AdminController extends Controller {
 
         $headers = array(
                 'Content-Type: application/vnd.ms-excel'
+            );
+        return Response::download($dlfile, $filename, $headers );
+    }
+
+    public function getCsv($filename)
+    {
+        $dlfile = public_path().'/storage/dled/'.$filename;
+
+        $headers = array(
+                'Content-Type: text/csv'
             );
         return Response::download($dlfile, $filename, $headers );
     }
