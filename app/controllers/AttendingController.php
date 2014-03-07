@@ -1,6 +1,6 @@
 <?php
 
-class AttendeeController extends AdminController {
+class AttendingController extends AdminController {
 
     public function __construct()
     {
@@ -67,7 +67,7 @@ class AttendeeController extends AdminController {
         );
 
         //print $this->model->where('docFormat','picture')->get()->toJSON();
-        $this->title = 'Attendees';
+        $this->title = 'Attendance';
 
         return parent::getIndex();
 
@@ -88,6 +88,8 @@ class AttendeeController extends AdminController {
             array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
             array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
         );
+
+        $this->additionalQuery = array('attending'=>1);
 
         return parent::postIndex();
     }

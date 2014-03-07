@@ -12,6 +12,7 @@
 
         @if(Auth::user()->role == 'root' || Auth::user()->role == 'admin')
         <li><a href="{{ URL::to('attendee') }}" {{ sa('attendee') }} >Attendee</a></li>
+        <li><a href="{{ URL::to('attending') }}" {{ sa('attending') }} >Attendance</a></li>
 
         <li><a href="{{ URL::to('user') }}" {{ sa('user') }} >Admins</a></li>
         <li class="dropdown">

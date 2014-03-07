@@ -43,6 +43,73 @@ class AjaxController extends BaseController {
 
     }
 
+    public function postScan()
+    {
+        $in = Input::get();
+
+        $attid = trim($in['txtin']);
+
+        $guest = Attendee::find($attid);
+
+        $attendee = false;
+
+        $tabstat = false;
+
+        if($guest){
+            $attendee = $guest->toArray();
+            if($guest->attending == 1){
+                $instat = 'Guest already scanned, have a good day !';
+                $res = 'NOK';
+            }else{
+
+                $guest->attending = 1;
+                $guest->save();
+                $instat = 'Welcome, have a pleasant stay !';
+
+                $statcount = Attendee::where('tableNumber','=',$guest->tableNumber)
+                    ->where('seatNumber','=',$guest->seatNumber)
+                    ->where('attending','=',1)
+                    ->count();
+
+                $res = 'OK';
+            }
+        }else{
+            $instat = 'Unregistered guest code.';
+            $res = 'NOK';
+        }
+
+
+        $attending = Attendee::where('attending','=',1)->get()->toArray();
+
+        $ts = array();
+
+        foreach ($attending as $att) {
+            $tidx = $att['type'].'-'.$att['tableNumber'];
+            if(isset($ts[$tidx])){
+                $ts[$tidx] = $ts[$tidx] + 1;
+            }else{
+                $ts[$tidx] = 1;
+            }
+        }
+
+        $tabstat = $ts;
+        /*
+        $tabstat = array();
+        foreach($ts as $key=>$value){
+            $tabstat[] = array('id'=>$key,'val'=>$value);
+        }
+        */
+
+        $result = array(
+            'attendee'=>$attendee,
+            'tabstat'=>$tabstat,
+            'html'=>$instat,
+            'result'=>$res
+        );
+
+        return Response::json($result);
+    }
+
     public function getPlaylist(){
         $mc = LMongo::collection('playlist');
 

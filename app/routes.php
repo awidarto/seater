@@ -12,7 +12,7 @@
 */
 Route::controller('document', 'DocumentController');
 Route::controller('attendee', 'AttendeeController');
-//Route::controller('attendance', 'AttendanceController');
+Route::controller('attending', 'AttendingController');
 Route::controller('user', 'UserController');
 Route::controller('agent', 'AgentController');
 Route::controller('buyer', 'BuyerController');

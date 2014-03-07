@@ -19,6 +19,9 @@
         display: inline-block;
         text-align: center;
         position: relative;
+        -webkit-border-radius: 8px;
+        -moz-border-radius: 8px;
+        border-radius: 8px;
     }
 
     .tablebox h3{
@@ -63,7 +66,11 @@
                 <li>
                     <div>
                         <div class="tablebox orange" id="VIP-{{ ($i + 1 ) }}-box">
-                            <h3 id="{{ 'VIP-'.($i + 1 ) }}">0</h3>
+                            <h3 id="{{ 'VIP-'.($i + 1 ) }}">
+                                @if(isset($tabstat[ 'VIP-'.($i + 1 ) ]))
+                                    {{ $tabstat[ 'VIP-'.($i + 1 ) ] }}
+                                @endif
+                            </h3>
                         </div>
                         <div>
                             <h3>{{ $i + 1 }}</h3>
@@ -80,7 +87,11 @@
                 <li>
                     <div>
                         <div class="tablebox green" id="REGULAR-{{ ($i + 1 ) }}-box" >
-                            <h3 id="{{ 'REGULAR-'.($i + 1 ) }}">0</h3>
+                            <h3 id="{{ 'REGULAR-'.($i + 1 ) }}">
+                                @if(isset($tabstat[ 'REGULAR-'.($i + 1 ) ]))
+                                    {{ $tabstat[ 'REGULAR-'.($i + 1 ) ] }}
+                                @endif
+                            </h3>
                         </div>
                         <div>
                             <h3>{{ $i + 1 }}</h3>
@@ -98,6 +109,10 @@
             <h5 id="guest-title">Work Unit</h5>
             <h3 >Table : <span id="table-number">1</span>&nbsp;&nbsp;&nbsp; Seat : <span id="seat-number">1</span></h3>
             {{ Former::text('barcode','')->id('barcode')->class('span10') }}
+
+            <div id="scanResult">
+                Hello !
+            </div>
         </div>
     </div>
 </div>
@@ -113,6 +128,42 @@ $(document).ready(function() {
     $('select').select2({
       width : 'resolve'
     });
+
+    $('#barcode').focus();
+
+    $('#barcode').on('keyup',function(ev){
+        if(ev.keyCode == '13'){
+            onScanResult();
+        }
+        //$('#barcode').val($('#barcode').val() + event.keyCode);
+    });
+
+    function onScanResult(){
+        var txtin = $("#barcode").val();
+
+        $.post('{{ URL::to('ajax/scan') }}',
+            { 'txtin':txtin },
+            function(data){
+                if(data.result == 'OK'){
+                    $('#scanResult').html(data.html);
+                }else{
+                    $('#scanResult').html(data.html);
+                }
+
+                var t = data.tabstat;
+
+                $.each(t, function(key,val){
+                    $('#' + key).html(val);
+                });
+
+                clearList();
+            },'json'
+        );
+    }
+
+    function clearList(){
+        $('#barcode').val('').focus();
+    }
 
 });
 

@@ -20,7 +20,21 @@ class ScannerController extends AdminController {
 
     public function getIndex(){
         $this->title = 'Seating';
-        return View::make('seating.chart')->with('title',$this->title);
+
+        $attending = Attendee::where('attending','=',1)->get()->toArray();
+
+        $tabstat = array();
+
+        foreach ($attending as $att) {
+            $tidx = $att['type'].'-'.$att['tableNumber'];
+            if(isset($tabstat[$tidx])){
+                $tabstat[$tidx] = $tabstat[$tidx] + 1;
+            }else{
+                $tabstat[$tidx] = 1;
+            }
+        }
+
+        return View::make('seating.chart')->with('title',$this->title)->with('tabstat',$tabstat);
     }
 
 }

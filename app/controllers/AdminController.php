@@ -30,6 +30,8 @@ class AdminController extends Controller {
 
 	public $view_object = 'view';
 
+    public $additionalQuery = null;
+
 	public $title = '';
 
     public $ajaxsource = null;
@@ -315,6 +317,12 @@ class AdminController extends Controller {
 		}
 
 		//print_r($q);
+
+        if(!is_null($this->additionalQuery)){
+            if(is_array($this->additionalQuery)){
+                $q = array_merge($this->additionalQuery, $q);
+            }
+        }
 
 
 		/* first column is always sequence number, so must be omitted */
