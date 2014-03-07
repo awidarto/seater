@@ -52,7 +52,7 @@ return array(
             'port'     => 27017,
             'username' => 'ia',
             'password' => 'ia2013',
-            'database' => 'ia'
+            'database' => 'seater'
         ),
 
 		'sqlite' => array(

@@ -36,6 +36,7 @@
 
                         $thumb = '<li><img style="width:125px;" src="%s"><span class="file_del icon-trash" id="%s"></span>';
                         $thumb .= '<span class="img-title">%s</span>';
+                        /*
                         $thumb .= '<label for="defaultpic"><input type="radio" name="defaultpic" value="%s" %s > Default</label>';
 
                         $thumb .= 'Brochure<br />';
@@ -45,6 +46,7 @@
                         $thumb .= '<input type="radio" name="brc3" value="%s" %s > Pic 3 &nbsp;';
 
                         $thumb .= '<label for="caption">Caption</label><input type="text" name="caption[]" value="%s" />';
+                        */
                         $thumb .= '</li>';
 
                         // display previously saved data
@@ -52,6 +54,7 @@
 
                         foreach ($formdata['files'] as $k => $v) {
 
+                            /*
                             if(isset($formdata['defaultpic'])){
                                 if($formdata['defaultpic'] == $k){
                                     $isdef = 'checked="checked"';
@@ -87,12 +90,13 @@
                             }else{
                                 $isdef3 = ' ';
                             }
-
+                            */
 
                             printf($thumb,
                                 $v['thumbnail_url'],
                                 $v['file_id'],
-                                $v['filename'],
+                                $v['filename']
+                                /*
                                 $v['file_id'],
                                 $isdef,
                                 $v['file_id'], $headdef,
@@ -100,6 +104,7 @@
                                 $v['file_id'], $isdef2,
                                 $v['file_id'], $isdef3,
                                 $v['caption']
+                                */
                                 );
 
                         }
@@ -116,6 +121,7 @@
 
                         $thumb = '<li><img style="width:125px;" src="%s"><span class="file_del icon-trash" id="%s"></span>';
                         $thumb .= '<span class="img-title">%s</span>';
+                        /*
                         $thumb .= '<label for="defaultpic"><input type="radio" name="defaultpic" value="%s" %s > Default</label>';
 
                         $thumb .= 'Brochure<br />';
@@ -125,9 +131,11 @@
                         $thumb .= '<input type="radio" name="brc3" value="%s" %s > Pic 3 &nbsp;';
 
                         $thumb .= '<label for="caption">Caption</label><input type="text" name="caption[]" value="%s" />';
+                        */
                         $thumb .= '</li>';
 
                         for($t = 0; $t < count($filename);$t++){
+                            /*
                             if(isset($allin['defaultpic'])){
                                 if($allin['defaultpic'] == $allin['file_id'][$t]){
                                     $isdef = 'checked="checked"';
@@ -180,10 +188,13 @@
                                 }
                             }
 
+                            */
+
                             printf($thumb,
                                 $thumbnail_url[$t],
                                 $file_id[$t],
-                                $filename[$t],
+                                $filename[$t]
+                                /*
                                 $file_id[$t],
                                 $isdef,
                                 $file_id[$t], $headdef,
@@ -191,6 +202,7 @@
                                 $file_id[$t], $isdef2,
                                 $file_id[$t], $isdef3,
                                 $allin['caption'][$t]
+                                */
                             );
 
                         }
@@ -314,15 +326,15 @@ $(document).ready(function(){
 
             $.each(data.result.files, function (index, file) {
                 var thumb = '<li><img style="width:125px;"  src="' + file.thumbnail_url + '" />'+
-                    '<span class="file_del" id="' + file.file_id +'"><i class="icon-trash"></i></span>'+
-                    '&nbsp;&nbsp;<span class="img-title">' + file.name + '</span><br />' +
-                    '<input type="radio" name="defaultpic" value="' + file.file_id + '"> Default<br />'+
-                    'Brochure <br />' +
-                    '<input type="radio" name="brchead" value="' + file.file_id + '"> Head &nbsp;'+
-                    '<input type="radio" name="brc1" value="' + file.file_id + '"> Pic 1 &nbsp;'+
-                    '<input type="radio" name="brc2" value="' + file.file_id + '"> Pic 2 &nbsp;'+
-                    '<input type="radio" name="brc3" value="' + file.file_id + '"> Pic 3 <br />'+
-                '<label for="caption">Caption</label><input type="text" name="caption[]" />' +
+                  '<span class="file_del" id="' + file.file_id +'"><i class="icon-trash"></i></span>'+
+                  '&nbsp;&nbsp;<span class="img-title">' + file.name + '</span><br />' +
+                //  '<input type="radio" name="defaultpic" value="' + file.file_id + '"> Default<br />'+
+                //  'Brochure <br />' +
+                //  '<input type="radio" name="brchead" value="' + file.file_id + '"> Head &nbsp;'+
+                //  '<input type="radio" name="brc1" value="' + file.file_id + '"> Pic 1 &nbsp;'+
+                //  '<input type="radio" name="brc2" value="' + file.file_id + '"> Pic 2 &nbsp;'+
+                //  '<input type="radio" name="brc3" value="' + file.file_id + '"> Pic 3 <br />'+
+                //'<label for="caption">Caption</label><input type="text" name="caption[]" />' +
                 //'<label for="material">Material & Finish</label><input type="text" name="material[]" />' +
                 //'<label for="tags">Tags</label><input type="text" name="tag[]" />' +
                 '</li>';

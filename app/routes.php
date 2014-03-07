@@ -11,7 +11,8 @@
 |
 */
 Route::controller('document', 'DocumentController');
-Route::controller('property', 'PropertyController');
+Route::controller('attendee', 'AttendeeController');
+//Route::controller('attendance', 'AttendanceController');
 Route::controller('user', 'UserController');
 Route::controller('agent', 'AgentController');
 Route::controller('buyer', 'BuyerController');
@@ -47,7 +48,8 @@ Route::controller('ajax', 'AjaxController');
 
 Route::controller('home', 'HomeController');
 
-Route::get('/', 'PropertyController@getIndex');
+Route::get('/', 'ScannerController@getIndex');
+
 
 
 Route::get('content/pages', 'PagesController@getIndex');
@@ -137,6 +139,12 @@ Route::get('propman',function(){
 
     //print_r($propManArr);
 
+});
+
+Route::get('barcode/{txt}',function($txt){
+    $barcode = new Barcode();
+    $barcode->make($txt,'code39',40);
+    return $barcode->render('jpg');
 });
 
 Route::get('tofin',function(){

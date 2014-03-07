@@ -124,9 +124,9 @@
                         <a href="{{ URL::to('logout')}}" ><i class="icon-logout"></i>&nbsp;Logout</a>
                     </p>
                 @else
-                    <form class="navbar-form pull-right">
-                        <input class="span2" type="text" placeholder="Email">
-                        <input class="span2" type="password" placeholder="Password">
+                    <form class="navbar-form pull-right form-inline" method="post" action="{{ URL::to('login')}}">
+                        {{ Former::text('email','')->placeholder('Email')->class('span2') }}
+                        {{ Former::password('password','')->placeholder('password')->class('span2') }}
                         <button type="submit" class="btn btn-primary">Sign in</button>
                     </form>
                 @endif

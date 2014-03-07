@@ -35,22 +35,22 @@ class UploadController extends Controller {
         $uploadSuccess = $file->move($destinationPath, $filename);
 
         $thumbnail = Image::make($destinationPath.'/'.$filename)
-            ->grab(100,74)
+            ->grab(75,100)
             //->insert($sm_wm,0,0, 'bottom-right')
             ->save($destinationPath.'/th_'.$filename);
 
         $medium = Image::make($destinationPath.'/'.$filename)
-            ->grab(270,200)
+            ->grab(220,230)
             //->insert($med_wm,0,0, 'bottom-right')
             ->save($destinationPath.'/med_'.$filename);
 
         $large = Image::make($destinationPath.'/'.$filename)
-            ->grab(870,420)
-            ->insert($large_wm,15,15, 'bottom-right')
+            ->grab(420,870)
+            //->insert($large_wm,15,15, 'bottom-right')
             ->save($destinationPath.'/lrg_'.$filename);
 
         $full = Image::make($destinationPath.'/'.$filename)
-            ->insert($large_wm,15,15, 'bottom-right')
+            //->insert($large_wm,15,15, 'bottom-right')
             ->save($destinationPath.'/full_'.$filename);
 
         $fileitems = array();
