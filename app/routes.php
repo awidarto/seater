@@ -144,7 +144,7 @@ Route::get('propman',function(){
 Route::get('barcode/{txt}',function($txt){
     $barcode = new Barcode();
     $barcode->make($txt,'code39',40);
-    return $barcode->render('jpg');
+    return $barcode->render('jpg',$txt);
 });
 
 Route::get('tofin',function(){

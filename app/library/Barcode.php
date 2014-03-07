@@ -2,7 +2,7 @@
 
 class Barcode{
 
-	var $barcode = ''; 
+	var $barcode = '';
 
 	function __construct()
     {
@@ -123,22 +123,25 @@ class Barcode{
 		$this->barcode = $image;
     }
 
-    public function render($type, $save = false){
+    public function render($type, $filename = 'imgfile' ,$save = false){
     	if($save){
 
     	}else{
     		if($type == 'gif'){
-    			  header('Content-type: image/gif');
-				  imagegif($this->barcode);
-				  imagedestroy($this->barcode);
+                header('Content-Type: image/gif');
+                header('Content-Disposition: filename="'.$filename.'.jpg"');
+                imagegif($this->barcode);
+                imagedestroy($this->barcode);
     		}elseif ($type == 'png') {
-    			  header('Content-type: image/png');
-				  imagepng($this->barcode);
-				  imagedestroy($this->barcode);
+                header('Content-Type: image/png');
+                header('Content-Disposition: filename="'.$filename.'.jpg"');
+                imagepng($this->barcode);
+                imagedestroy($this->barcode);
     		}elseif($type == 'jpg'){
-    			  header('Content-type: image/jpg');
-				  imagejpeg($this->barcode);
-				  imagedestroy($this->barcode);
+                header('Content-Type: image/jpeg');
+                header('Content-Disposition: filename="'.$filename.'.jpg"');
+                imagejpeg($this->barcode);
+                imagedestroy($this->barcode);
     		}
     	}
     }

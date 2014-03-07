@@ -251,7 +251,8 @@ class AttendeeController extends AdminController {
 
     public function beforeImportCommit($data)
     {
-
+        $hcode = substr($data['type'],0,1).str_pad($data['tableNumber'], 2,'0',STR_PAD_LEFT).str_pad($data['seatNumber'], 2,'0',STR_PAD_LEFT);
+        $data['hcode'] = $hcode;
         return $data;
     }
 
@@ -307,8 +308,8 @@ class AttendeeController extends AdminController {
 
     public function dispBar($data)
     {
-        $display = HTML::image(URL::to('barcode/'.$data['_id']), $data['tableNumber'].' '.$data['seatNumber'], array('id' => $data['_id'], 'style'=>'width:100px;height:auto;' ));
-        return $display.'<br />'.$data['type'].'-'.$data['tableNumber'].'-'.$data['seatNumber'];
+        $display = HTML::image(URL::to('barcode/'.$data['hcode']), $data['hcode'], array('id' => $data['_id'], 'style'=>'width:100px;height:auto;' ));
+        return $display.'<br />'.$data['hcode'];
     }
 
     public function pics($data)
