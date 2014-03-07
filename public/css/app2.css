@@ -205,3 +205,18 @@ div.dataTables_length label {
 .row-fluid [class*="span"]{
     min-height: 26px;
 }
+
+.seatTaken{
+    display: block;
+    padding: 4px;
+    background-color: green;
+    color:white;
+    text-align: center;
+}
+
+.seatOpen{
+    display: block;
+    padding: 4px;
+    background-color: transparent;
+    text-align: center;
+}

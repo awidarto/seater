@@ -621,3 +621,9 @@ thead#searchinput tr td input.search_init{
 	right: 0;
 }
 
+.seatTaken{
+    display: inline-block;
+    padding: 8px;
+    background-color: green;
+}
+

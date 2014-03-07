@@ -78,9 +78,9 @@ class AttendeeController extends AdminController {
 
         $this->fields = array(
             array('tableNumber',array('kind'=>'numeric','callback'=>'namePic', 'query'=>'like','pos'=>'both','show'=>true)),
-            array('tableNumber',array('kind'=>'numeric','callback'=>'dispBar', 'query'=>'like','pos'=>'both','show'=>true)),
+            array('hcode',array('kind'=>'text','callback'=>'dispBar', 'query'=>'like','pos'=>'both','show'=>true)),
             array('tableNumber',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
-            array('seatNumber',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
+            array('seatNumber',array('kind'=>'numeric','callback'=>'seatTaken','query'=>'like','pos'=>'both','show'=>true)),
             array('name',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'attr'=>array('class'=>'expander'))),
             array('title',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('unit',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
@@ -310,6 +310,16 @@ class AttendeeController extends AdminController {
     {
         $display = HTML::image(URL::to('barcode/'.$data['hcode']), $data['hcode'], array('id' => $data['_id'], 'style'=>'width:100px;height:auto;' ));
         return $display.'<br />'.$data['hcode'];
+    }
+
+    public function seatTaken($data)
+    {
+        if($data['attending'] == 1){
+            $taken = '<span class="seatTaken">'.$data['seatNumber'].'</span>';
+        }else{
+            $taken = '<span class="seatOpen">'.$data['seatNumber'].'</span>';
+        }
+        return $taken;
     }
 
     public function pics($data)

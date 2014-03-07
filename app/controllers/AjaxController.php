@@ -49,7 +49,9 @@ class AjaxController extends BaseController {
 
         $attid = trim($in['txtin']);
 
-        $guest = Attendee::find($attid);
+        //$guest = Attendee::find($attid);
+
+        $guest = Attendee::where('hcode','=',$attid)->first();
 
         $attendee = false;
 
